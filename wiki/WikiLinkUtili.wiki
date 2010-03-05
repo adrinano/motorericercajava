@@ -1,2 +1,7 @@
 =Link Utili=
 * http://www.lucenetutorial.com/
+
+*http://programmaremobile.blogspot.com/2008/10/lucene-un-motore-di-ricerca-in-java.html     
+anche questo fa riferimento ad una vecchia versione, ma almeno per capire il funzionamento base...
+
+Curiosità: wikipedia usa Lucene per le ricerche full-text
