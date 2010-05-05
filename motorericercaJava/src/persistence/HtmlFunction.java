@@ -5,10 +5,17 @@
 
 package persistence;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,6 +41,30 @@ public class HtmlFunction {
 
 
         return true;
+
+    }
+
+    /**
+     *
+     * @param file
+     * @param number
+     */
+    public void htmlParser(String uri) throws IOException{
+        try {
+            URL url = new URL(uri);
+            WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
+            HtmlPage page = (HtmlPage) wc.getPage(url);
+            List<HtmlAnchor> anchors = page.getAnchors();
+
+            for (int i=0; i<anchors.size(); i++){
+                System.out.println("Anchor " + i + " : " + anchors.get(i).getTextContent());
+            }
+
+            System.out.println(anchors.get(53).getHrefAttribute());
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
