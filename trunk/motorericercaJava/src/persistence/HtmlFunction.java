@@ -57,10 +57,12 @@ public class HtmlFunction {
             List<HtmlAnchor> anchors = page.getAnchors();
 
             for (int i=0; i<anchors.size(); i++){
-                System.out.println("Anchor " + i + " : " + anchors.get(i).getTextContent());
+                if (anchors.get(i).getTextContent().contains("Lazio")){
+                    System.out.println("Anchor " + i + " : " + anchors.get(i).getTextContent());
+                    System.out.println(anchors.get(i).getHrefAttribute());
+                }
             }
 
-            System.out.println(anchors.get(53).getHrefAttribute());
 
         } catch (MalformedURLException ex) {
             Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, null, ex);
