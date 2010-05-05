@@ -32,15 +32,17 @@ public class Shell {
         String path = "html_download";
 
         HtmlFunction html= new HtmlFunction();
-        boolean create = html.getPage(path, url, 1);
+        //boolean create = html.getPage(path, url, 1);
+
+        html.htmlParser(url);
 
         //IndexFunction index = new IndexFunction();
         File fileDir = new File(path);
         //System.out.println(fileDir.isDirectory());
         File file = fileDir.listFiles()[0];
 
-        HtmlParser htmlparser = new HtmlParser();
-        htmlparser.Parser(file, 1);
+        //HtmlParser htmlparser = new HtmlParser();
+        //htmlparser.Parser(file, 1);
 
         //index.addDoc(fileDir, true);
 
