@@ -28,13 +28,14 @@ import persistence.IndexFunction;
 public class Shell {
 
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException{
-        String url = "http://www.liverock.it/concerti.php";
+        String sito = "http://www.liverock.it";
+        String url = "/concerti.php";
         String path = "html_download";
 
         HtmlFunction html= new HtmlFunction();
         //boolean create = html.getPage(path, url, 1);
 
-        html.htmlParser(url);
+        html.htmlParser(sito,url);
 
         //IndexFunction index = new IndexFunction();
         File fileDir = new File(path);
