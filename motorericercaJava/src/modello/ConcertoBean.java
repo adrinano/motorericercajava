@@ -18,16 +18,9 @@ public class ConcertoBean {
     private String locale;
     private String citta;
     private String provincia;
+    private String regione;
+    private String googleMaps;
     private String youtube;
-
-    public ConcertoBean(String artista, String data, String locale, String citta, String provincia, String youtube) {
-        this.artista = artista;
-        this.data = data;
-        this.locale = locale;
-        this.citta = citta;
-        this.provincia = provincia;
-        this.youtube = youtube;
-    }
 
     /**
      * @return the artista
@@ -100,6 +93,34 @@ public class ConcertoBean {
     }
 
     /**
+     * @return the regione
+     */
+    public String getRegione() {
+        return regione;
+    }
+
+    /**
+     * @param regione the regione to set
+     */
+    public void setRegione(String regione) {
+        this.regione = regione;
+    }
+
+    /**
+     * @return the googleMaps
+     */
+    public String getGoogleMaps() {
+        return googleMaps;
+    }
+
+    /**
+     * @param googleMaps the googleMaps to set
+     */
+    public void setGoogleMaps(String googleMaps) {
+        this.googleMaps = googleMaps;
+    }
+
+    /**
      * @return the youtube
      */
     public String getYoutube() {
@@ -112,10 +133,6 @@ public class ConcertoBean {
     public void setYoutube(String youtube) {
         this.youtube = youtube;
     }
-
-
-
-
 
 
 

@@ -54,8 +54,6 @@ public class IndexFunction{
      */
     public void addDoc(File fileDir, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
-
-
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
 
         File[] textFiles = fileDir.listFiles();
