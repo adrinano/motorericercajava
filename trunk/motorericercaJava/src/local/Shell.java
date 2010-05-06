@@ -7,6 +7,8 @@ package local;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import modello.ConcertoBean;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
@@ -30,16 +32,31 @@ public class Shell {
         String sito = "http://www.liverock.it";
         String url = "/concerti.php";
         String path = "html_download";
-
-        HtmlFunction html= new HtmlFunction();
+        //HtmlFunction html= new HtmlFunction();
         //boolean create = html.getPage(path, url, 1);
+        //html.htmlParser(sito,url);
+        LinkedList<ConcertoBean> lista = new LinkedList<ConcertoBean>();
 
-        html.htmlParser(sito,url);
+        ConcertoBean c1 = new ConcertoBean();
+        ConcertoBean c2 = new ConcertoBean();
+        ConcertoBean c3 = new ConcertoBean();
+        ConcertoBean c4 = new ConcertoBean();
 
-        //IndexFunction index = new IndexFunction();
-        File fileDir = new File(path);
+        c1.setArtista("io");
+        c2.setArtista("me");
+        c3.setArtista("te");
+        c4.setArtista("egli");
+        lista.add(c1);
+        lista.add(c2);
+        lista.add(c3);
+        lista.add(c4);
+
+        IndexFunction index = new IndexFunction();
+        index.indicizza(lista, true);
+
+        //File fileDir = new File(path);
         //System.out.println(fileDir.isDirectory());
-        File file = fileDir.listFiles()[0];
+        //File file = fileDir.listFiles()[0];
 
         //HtmlParser htmlparser = new HtmlParser();
         //htmlparser.Parser(file, 1);

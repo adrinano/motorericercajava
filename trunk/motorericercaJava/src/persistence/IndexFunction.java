@@ -9,10 +9,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import javax.swing.JOptionPane;
+import java.util.Iterator;
+import java.util.List;
+import modello.ConcertoBean;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.demo.HTMLDocument;
-import org.apache.lucene.demo.html.HTMLParser;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
@@ -23,7 +24,6 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.RAMDirectory;
@@ -39,20 +39,32 @@ public class IndexFunction{
     private Directory indexDir;
 
     public IndexFunction() {
-
-         this.luceneAnalyzer = new StandardAnalyzer(Version.LUCENE_30);
-         //indexDir indica che Lucene crea l'index in memoria principale
-         this.indexDir = new RAMDirectory();
+        //imposto la versione di Lucene
+        this.luceneAnalyzer = new StandardAnalyzer(Version.LUCENE_30);
+        //indexDir indica che Lucene crea l'index in memoria principale
+        this.indexDir = new RAMDirectory();
 
     }
 
 
-
     /**
      * indicizzazione del contenuto delle tabelle prese dal sito
-     * fileDir is the directory that contains the text files to be indexed
      */
-    public void addDoc(File fileDir, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void indicizza(List<ConcertoBean> listConcerti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+
+        IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
+        Iterator<ConcertoBean> iterator = listConcerti.iterator();
+        while(iterator.hasNext()){
+            //addDoc(null, create);
+            System.out.println("si " + iterator.next().getArtista());
+        }
+    }
+
+
+    /**
+     * Aggiunge il documento da indicizzare
+     */
+    private void addDoc(File fileDir, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
 
