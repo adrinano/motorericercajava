@@ -82,7 +82,7 @@ public class HtmlFunction {
 	System.out.println("Keywords: " + info.getKeywords());
 	System.out.println("Subject: " + info.getSubject());
 	System.out.println("Creator: " + info.getCreator());
-	System.out.println("Traped: " + info.getTrapped());
+	System.out.println("Trapped: " + info.getTrapped());
 	System.out.println("pdf Path: " + url.toString());
 
         Date date = new Date(connection.getLastModified());
@@ -90,6 +90,6 @@ public class HtmlFunction {
 	System.out.println("------------");
 	pdf.close();
     }
-    
+
 
 }
