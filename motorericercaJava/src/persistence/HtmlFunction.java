@@ -75,7 +75,6 @@ public class HtmlFunction {
 
         PDDocumentInformation info = pdf.getDocumentInformation();
 
-	//System.out.println("Summary: " + summary.trim());
 	System.out.println("Title: " + info.getTitle());
 	System.out.println("Author: " + info.getAuthor());
 	System.out.println("Contents: " + contents.length());
@@ -83,6 +82,7 @@ public class HtmlFunction {
 	System.out.println("Subject: " + info.getSubject());
 	System.out.println("Creator: " + info.getCreator());
 	System.out.println("Trapped: " + info.getTrapped());
+        System.out.println("Producer: " + info.getProducer());
 	System.out.println("pdf Path: " + url.toString());
 
         Date date = new Date(connection.getLastModified());
