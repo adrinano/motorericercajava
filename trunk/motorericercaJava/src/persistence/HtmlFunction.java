@@ -34,6 +34,8 @@ public class HtmlFunction {
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
         try {
             HtmlPage page = wc.getPage(url);
+
+
             List<HtmlAnchor> anchors = page.getAnchors();
 
             for (int i=0; i<anchors.size(); i++){
@@ -84,10 +86,9 @@ public class HtmlFunction {
 	System.out.println("Trapped: " + info.getTrapped());
         System.out.println("Producer: " + info.getProducer());
 	System.out.println("pdf Path: " + url.toString());
-        System.out.println( "Creation Date=" + info.getCreationDate());
-
-        Date date = new Date(connection.getLastModified());
-	System.out.println("Modification Date: " + info.getModificationDate());
+        
+        //La data di creazione di un pdf coincide con la data di modifica del documento
+        System.out.println("Creation Date: " + info.getCreationDate().getTime());
 	System.out.println("------------");
 	pdf.close();
     }
