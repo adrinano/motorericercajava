@@ -84,6 +84,7 @@ public class HtmlFunction {
 	System.out.println("Trapped: " + info.getTrapped());
         System.out.println("Producer: " + info.getProducer());
 	System.out.println("pdf Path: " + url.toString());
+        System.out.println( "Creation Date=" + info.getCreationDate());
 
         Date date = new Date(connection.getLastModified());
 	System.out.println("Modification Date: " + info.getModificationDate());
