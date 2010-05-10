@@ -6,17 +6,21 @@
 package persistence;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.StringWriter;
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLConnection;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
  *
@@ -24,91 +28,68 @@ import java.util.logging.Logger;
  */
 public class HtmlFunction {
 
-    /**
-     * prendere la pagina web e restituirla di modo da indicizzarla con lucene
-     */
-    @SuppressWarnings("empty-statement")
-    public boolean getPage(String path, String url, int number) throws IOException{
+    public List<URL> getURL(URL url){
 
-        WebClient webClient = new WebClient();
-        HtmlPage page = webClient.getPage(url);
-        File fileToSave = new File(path + File.separator +"page_" + number + ".html");
-
-        if (fileToSave.exists()){
-            fileToSave.delete();
-        }
-
-        page.save(fileToSave);
-
-
-        return true;
-
-    }
-    /**
-     * inizializzazione degli elementi della lista delle regioni
-     * @return List
-     */
-    private List aggiungiRegioni() {
-        List<String> listaReg = new ArrayList();
-        listaReg.add("Lazio");
-        listaReg.add("Svizzera");
-        listaReg.add("Aosta");    //Valle d'Aosta
-        listaReg.add("Piemonte");
-        listaReg.add("Liguria");
-        listaReg.add("Toscana");
-        listaReg.add("Umbria");
-        listaReg.add("Basilicata");
-        listaReg.add("Marche");
-        listaReg.add("Abruzzo");
-        listaReg.add("Sardegna");
-        listaReg.add("Puglia");
-        listaReg.add("Lombardia");
-        listaReg.add("Alto Adige"); //Trentino Alto Adige
-        listaReg.add("Friuli Venezia Giulia");
-        listaReg.add("Veneto");
-        listaReg.add("Romagna"); //Emilia Romagna
-        listaReg.add("Campania");
-        listaReg.add("Calabria");
-        listaReg.add("Molise");
-        listaReg.add("Sicilia");
-        return listaReg;
-    }
-
-    /**
-     *
-     * @param file
-     * @param number
-     */
-    public void htmlParser(String sito, String uri) throws IOException{
+	List<URL> lst = new LinkedList<URL>();
+        WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
         try {
-            URL url = new URL(sito+uri);
-            WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
-            HtmlPage page = (HtmlPage) wc.getPage(url);
+            HtmlPage page = wc.getPage(url);
             List<HtmlAnchor> anchors = page.getAnchors();
-            List<Integer> listaAncore = new ArrayList();    //lista delle ancore delle regioni
-            List<String> listaRegioni = aggiungiRegioni();    //lista delle regioni
 
             for (int i=0; i<anchors.size(); i++){
-                for (int r=0;r<listaRegioni.size();r++) {
-                    if (anchors.get(i).getTextContent().contains(listaRegioni.get(r))){
-                        //questi ci servono a vedere cosa prendiamo
-                        System.out.println("Anchor " + i + " : " + anchors.get(i).getTextContent());
-                        System.out.println(anchors.get(i).getHrefAttribute());
-                        listaAncore.add(i);
-                    }
-                }
-            }
-            //System.out.println("dimensione lista: "+listaAncore.size());
-            for (int j=0; j<listaAncore.size(); j++) {
-                //questo ci serve a vedere cosa prendiamo
-                System.out.println("indirizzo :"+ anchors.get(listaAncore.get(j)).openLinkInNewWindow().getWebResponse().getRequestSettings().getUrl());
+            File file =new File(anchors.get(i).getHrefAttribute());
+
+            if(file.getName().endsWith(".pdf")&& !anchors.get(i).getHrefAttribute().contains("http")){
+                lst.add(new URL(url.toString() + anchors.get(i).getHrefAttribute()));
+                System.out.println("Si: " + url.toString()+ anchors.get(i).getHrefAttribute());
             }
 
+	}
 
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	} catch (FailingHttpStatusCodeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+	}
+
+
+	return lst;
 
     }
+
+
+    public void getPDFinfo(URL url) throws IOException {
+        URLConnection connection = url.openConnection();
+	connection.connect();
+	PDDocument pdf = PDDocument.load(connection.getInputStream());
+
+	//create a writer where to append the text content.
+	StringWriter writer = new StringWriter();
+	PDFTextStripper stripper = new PDFTextStripper();
+	stripper.writeText( pdf, writer );
+
+	String contents = writer.getBuffer().toString();
+	//String summary = contents.substring( 0, contents.length() );
+
+        PDDocumentInformation info = pdf.getDocumentInformation();
+
+	//System.out.println("Summary: " + summary.trim());
+	System.out.println("Title: " + info.getTitle());
+	System.out.println("Author: " + info.getAuthor());
+	System.out.println("Contents: " + contents.length());
+	System.out.println("Keywords: " + info.getKeywords());
+	System.out.println("Subject: " + info.getSubject());
+	System.out.println("Creator: " + info.getCreator());
+	System.out.println("Traped: " + info.getTrapped());
+	System.out.println("pdf Path: " + url.toString());
+
+        Date date = new Date(connection.getLastModified());
+	System.out.println("Modification Date: " + info.getModificationDate());
+	System.out.println("------------");
+	pdf.close();
+    }
+    
 
 }

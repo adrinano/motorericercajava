@@ -5,22 +5,12 @@
 
 package local;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import modello.ConcertoBean;
-import org.apache.lucene.document.Document;
+import java.net.URL;
+import java.util.List;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.util.Version;
 import persistence.HtmlFunction;
-import persistence.IndexFunction;
 
 /**
  *
@@ -29,42 +19,21 @@ import persistence.IndexFunction;
 public class Shell {
 
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException{
-        String sito = "http://www.liverock.it";
-        String url = "/concerti.php";
-        String path = "html_download";
-        //HtmlFunction html= new HtmlFunction();
-        //boolean create = html.getPage(path, url, 1);
-        //html.htmlParser(sito,url);
-        LinkedList<ConcertoBean> lista = new LinkedList<ConcertoBean>();
+        String pathname = "file/07_memory_management.pdf";
+	URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
 
-        ConcertoBean c1 = new ConcertoBean();
-        ConcertoBean c2 = new ConcertoBean();
-        ConcertoBean c3 = new ConcertoBean();
-        ConcertoBean c4 = new ConcertoBean();
+        HtmlFunction html = new HtmlFunction();
+	List<URL> lista = html.getURL(url);
 
-        c1.setArtista("io");
-        c2.setArtista("me");
-        c3.setArtista("te");
-        c4.setArtista("egli");
-        lista.add(c1);
-        lista.add(c2);
-        lista.add(c3);
-        lista.add(c4);
+	System.out.println("isEmpty: " + lista.isEmpty());
+	for (int i=0; i<lista.size(); i++){
+		html.getPDFinfo(lista.get(i));
+	}
+	
 
-        IndexFunction index = new IndexFunction();
-        index.indicizza(lista, true);
-
-        //File fileDir = new File(path);
-        //System.out.println(fileDir.isDirectory());
-        //File file = fileDir.listFiles()[0];
-
-        //HtmlParser htmlparser = new HtmlParser();
-        //htmlparser.Parser(file, 1);
-
-        //index.addDoc(fileDir, true);
-
-        // 3. search
-        //index.search("content", "Lazio");
+	//File file = new File(pathname);
+	//Document doc = new Document();
+	//List<Fieldable> fields = doc.getFields();
 
     }
 
