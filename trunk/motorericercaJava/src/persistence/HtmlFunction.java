@@ -34,7 +34,7 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 public class HtmlFunction {
 
     /**
-     * Finzione che restituicse la lista degli url dei file da inficizzare
+     * Funzione che restituisce la lista degli url dei file da indicizzare
      * @param url
      * @param end
      * @return
@@ -91,6 +91,20 @@ public class HtmlFunction {
 
         SummaryInformation info = pptext.getSummaryInformation();
         System.out.println(info.getLastSaveDateTime().toString());
+        System.out.println("informazioni ppt AppName: " +info.getApplicationName());
+        System.out.println("informazioni ppt Author: " +info.getAuthor());
+        System.out.println("informazioni ppt Comment: " +info.getComments());
+        System.out.println("informazioni ppt Keyword: " +info.getKeywords());
+        System.out.println("informazioni ppt Lauthor: " +info.getLastAuthor());
+        System.out.println("informazioni ppt RevNumber: " +info.getRevNumber());
+        System.out.println("informazioni ppt Subject: " +info.getSubject());
+        System.out.println("informazioni ppt Template: " +info.getTemplate());
+        System.out.println("informazioni ppt Title: " +info.getTitle());
+        System.out.println("informazioni ppt CreateTime: " +info.getCreateDateTime().getTime());
+        System.out.println("informazioni ppt EditTime: " +info.getEditTime());
+        System.out.println("informazioni ppt LastSave: " +info.getLastSaveDateTime().getTime());
+        System.out.println("informazioni ppt PageCount: " +info.getPageCount());
+        System.out.println("informazioni ppt Property: " +info.getProperties());
         //System.out.println(pptext.getText(true, true));
 
     }
