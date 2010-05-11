@@ -111,6 +111,14 @@ public class IndexFunction{
 
     }
 
+    /**
+     * 
+     * @param field
+     * @param querystr
+     * @throws CorruptIndexException
+     * @throws IOException
+     * @throws ParseException
+     */
     public void search(String field, String querystr) throws CorruptIndexException, IOException, ParseException {
 
         int hitsPerPage = 20;
@@ -140,6 +148,8 @@ public class IndexFunction{
         // is no need to access the documents any more.
         searcher.close();
     }
+
+
 
 
 }
