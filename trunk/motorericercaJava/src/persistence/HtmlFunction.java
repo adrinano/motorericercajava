@@ -13,6 +13,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
@@ -32,13 +33,18 @@ import org.apache.poi.hslf.usermodel.SlideShow;
  */
 public class HtmlFunction {
 
-    public List<URL> getURLList(URL url, String end){
+    /**
+     * Finzione che restituicse la lista degli url dei file da inficizzare
+     * @param url
+     * @param end
+     * @return
+     */
+    public List<URL> getURLList(URL url, String end) throws URISyntaxException{
 
 	List<URL> lst = new LinkedList<URL>();
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
         try {
             HtmlPage page = wc.getPage(url);
-
 
             List<HtmlAnchor> anchors = page.getAnchors();
 
@@ -46,8 +52,15 @@ public class HtmlFunction {
             File file =new File(anchors.get(i).getHrefAttribute());
 
             if(file.getName().endsWith(end) && !anchors.get(i).getHrefAttribute().contains("http://")){
-                lst.add(new URL(url.toString() + anchors.get(i).getHrefAttribute()));
-                System.out.println("Si: " + url.toString()+ anchors.get(i).getHrefAttribute());
+                String pathIniziale = url.toString();
+                
+                if (!pathIniziale.endsWith("/")){
+                    File fileName = new File(url.toString());
+                    pathIniziale = eliminaFinale( fileName.getName(), url.toString());
+                }
+
+                lst.add(new URL( pathIniziale + anchors.get(i).getHrefAttribute()));
+                System.out.println("Si: " + pathIniziale + anchors.get(i).getHrefAttribute());
             }
 
         }
@@ -65,6 +78,11 @@ public class HtmlFunction {
 
     }
 
+    /**
+     * Funzione che restituisce le informazioni dei file PPT (libreria poi)
+     * @param url
+     * @throws IOException
+     */
     public void getPPTinfo (URL url) throws IOException{
         URLConnection connection = url.openConnection();
         connection.connect();
@@ -77,7 +95,11 @@ public class HtmlFunction {
 
     }
 
-
+    /**
+     * Funzione che restituisce le informazioni dei file PDF (libreria pdfbox)
+     * @param url
+     * @throws IOException
+     */
     public void getPDFinfo(URL url) throws IOException {
         URLConnection connection = url.openConnection();
 	connection.connect();
@@ -107,6 +129,11 @@ public class HtmlFunction {
         System.out.println("Creation Date: " + info.getCreationDate().getTime());
 	System.out.println("------------");
 	pdf.close();
+    }
+
+    private String eliminaFinale(String nodeName, String path){
+        int dif = path.length() - nodeName.length();
+        return path.substring(0, dif);
     }
 
 
