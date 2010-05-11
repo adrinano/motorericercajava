@@ -20,16 +20,18 @@ public class Shell {
 
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException{
         String pathname = "file/07_memory_management.pdf";
-	URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
+	//URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
+        URL url = new URL("http://www.dia.uniroma3.it/~crescenz/didattica/aa2009-2010/PC/materiale_files/PC-01-stallo.ppt");
 
         HtmlFunction html = new HtmlFunction();
-	List<URL> lista = html.getURL(url);
+	//List<URL> lista = html.getURLList(url, ".pdf");
 
-	System.out.println("isEmpty: " + lista.isEmpty());
-	for (int i=0; i<lista.size(); i++){
-		html.getPDFinfo(lista.get(i));
-	}
-	
+	//System.out.println("isEmpty: " + lista.isEmpty());
+	//for (int i=0; i<lista.size(); i++){
+	//	html.getPDFinfo(lista.get(i));
+	//}
+
+        html.getPPTinfo(url);
 
 	//File file = new File(pathname);
 	//Document doc = new Document();

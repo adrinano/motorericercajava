@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
-import modello.ConcertoBean;
+import modello.DispenseBean;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.demo.HTMLDocument;
 import org.apache.lucene.document.Document;
@@ -50,10 +50,10 @@ public class IndexFunction{
     /**
      * indicizzazione del contenuto delle tabelle prese dal sito
      */
-    public void indicizza(List<ConcertoBean> listConcerti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void indicizza(List<DispenseBean> listConcerti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
-        Iterator<ConcertoBean> iterator = listConcerti.iterator();
+        Iterator<DispenseBean> iterator = listConcerti.iterator();
         while(iterator.hasNext()){
             //addDoc(null, create);
             System.out.println("si " + iterator.next().getArtista());

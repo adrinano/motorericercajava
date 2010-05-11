@@ -21,6 +21,10 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.poi.hpsf.SummaryInformation;
+import org.apache.poi.hslf.HSLFSlideShow;
+import org.apache.poi.hslf.extractor.PowerPointExtractor;
+import org.apache.poi.hslf.usermodel.SlideShow;
 
 /**
  *
@@ -28,7 +32,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
  */
 public class HtmlFunction {
 
-    public List<URL> getURL(URL url){
+    public List<URL> getURLList(URL url, String end){
 
 	List<URL> lst = new LinkedList<URL>();
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
@@ -41,12 +45,12 @@ public class HtmlFunction {
             for (int i=0; i<anchors.size(); i++){
             File file =new File(anchors.get(i).getHrefAttribute());
 
-            if(file.getName().endsWith(".pdf")&& !anchors.get(i).getHrefAttribute().contains("http")){
+            if(file.getName().endsWith(end) && !anchors.get(i).getHrefAttribute().contains("http://")){
                 lst.add(new URL(url.toString() + anchors.get(i).getHrefAttribute()));
                 System.out.println("Si: " + url.toString()+ anchors.get(i).getHrefAttribute());
             }
 
-	}
+        }
 
 	} catch (FailingHttpStatusCodeException e) {
             // TODO Auto-generated catch block
@@ -58,6 +62,18 @@ public class HtmlFunction {
 
 
 	return lst;
+
+    }
+
+    public void getPPTinfo (URL url) throws IOException{
+        URLConnection connection = url.openConnection();
+        connection.connect();
+
+        PowerPointExtractor pptext = new PowerPointExtractor(connection.getInputStream());
+
+        SummaryInformation info = pptext.getSummaryInformation();
+        System.out.println(info.getLastSaveDateTime().toString());
+        //System.out.println(pptext.getText(true, true));
 
     }
 

@@ -11,7 +11,7 @@ import java.net.URL;
  *
  * @author palla
  */
-public class ConcertoBean {
+public class DispenseBean {
 
     private String artista;
     private String data;
