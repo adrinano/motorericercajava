@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
-import modello.DispenseBean;
+import modello.DocumentoPptBean;
+import modello.DocumentoPdfBean;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.demo.HTMLDocument;
 import org.apache.lucene.document.Document;
@@ -50,13 +51,17 @@ public class IndexFunction{
     /**
      * indicizzazione del contenuto delle tabelle prese dal sito
      */
-    public void indicizza(List<DispenseBean> listConcerti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void indicizza(List<DocumentoPdfBean> listDocumentiPdf, List<DocumentoPptBean> listDocumentiPpt, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
-        Iterator<DispenseBean> iterator = listConcerti.iterator();
-        while(iterator.hasNext()){
+        Iterator<DocumentoPptBean> iteratorPpt = listDocumentiPpt.iterator();
+        Iterator<DocumentoPdfBean> iteratorPdf = listDocumentiPdf.iterator();
+        while(iteratorPdf.hasNext()){
+            System.out.println("Titolo pdf:" + iteratorPdf.next().getTitolo());
+        }
+        while(iteratorPpt.hasNext()){
             //addDoc(null, create);
-            System.out.println("si " + iterator.next().getArtista());
+            System.out.println("Titolo ppt " + iteratorPpt.next().getTitolo());
         }
     }
 

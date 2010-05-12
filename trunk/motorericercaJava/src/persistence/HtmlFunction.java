@@ -19,6 +19,8 @@ import java.net.URLConnection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import modello.DocumentoPdfBean;
+import modello.DocumentoPptBean;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -32,6 +34,9 @@ import org.apache.poi.hslf.usermodel.SlideShow;
  * @author palla
  */
 public class HtmlFunction {
+
+    static final int tipoPdf = 1;
+    static final int tipoPpt = 0;
 
     /**
      * Funzione che restituisce la lista degli url dei file da indicizzare
@@ -83,9 +88,11 @@ public class HtmlFunction {
      * @param url
      * @throws IOException
      */
-    public void getPPTinfo (URL url) throws IOException{
+    public DocumentoPptBean getPPTinfo (URL url) throws IOException{
         URLConnection connection = url.openConnection();
         connection.connect();
+
+        DocumentoPptBean documentoPpt = new DocumentoPptBean();
 
         PowerPointExtractor pptext = new PowerPointExtractor(connection.getInputStream());
 
@@ -107,6 +114,8 @@ public class HtmlFunction {
         System.out.println("informazioni ppt Property: " +info.getProperties());
         //System.out.println(pptext.getText(true, true));
 
+        return documentoPpt;
+
     }
 
     /**
@@ -114,9 +123,12 @@ public class HtmlFunction {
      * @param url
      * @throws IOException
      */
-    public void getPDFinfo(URL url) throws IOException {
+    public DocumentoPdfBean getPDFinfo(URL url) throws IOException {
         URLConnection connection = url.openConnection();
 	connection.connect();
+
+        DocumentoPdfBean documentoPdf = new DocumentoPdfBean();
+
 	PDDocument pdf = PDDocument.load(connection.getInputStream());
 
 	//create a writer where to append the text content.
@@ -129,6 +141,22 @@ public class HtmlFunction {
 
         PDDocumentInformation info = pdf.getDocumentInformation();
 
+        documentoPdf.setAutore(info.getAuthor());
+        documentoPdf.setContenuto(contents.toString());
+        documentoPdf.setCreatore(info.getCreator());
+        documentoPdf.setDataCreazione(info.getCreationDate().getTime());
+        documentoPdf.setDataModifica(info.getModificationDate().getTime());
+        documentoPdf.setKeywords(info.getKeywords());
+        documentoPdf.setOggetto(info.getSubject());
+        documentoPdf.setPercorso(url.toString());
+        documentoPdf.setProduttore(info.getProducer());
+        documentoPdf.setTipoFile(tipoPdf);
+        documentoPdf.setTitolo(info.getTitle());
+        documentoPdf.setTrapped(info.getTrapped()); //ma a che ce serve????
+
+        System.out.println("letto il documento:" +info.getTitle());
+
+/*
 	System.out.println("Title: " + info.getTitle());
 	System.out.println("Author: " + info.getAuthor());
 	System.out.println("Contents: " + contents.length());
@@ -141,8 +169,12 @@ public class HtmlFunction {
         
         //La data di creazione di un pdf coincide con la data di modifica del documento
         System.out.println("Creation Date: " + info.getCreationDate().getTime());
-	System.out.println("------------");
+*/
+ System.out.println("------------");
+
 	pdf.close();
+
+        return documentoPdf;
     }
 
     private String eliminaFinale(String nodeName, String path){
