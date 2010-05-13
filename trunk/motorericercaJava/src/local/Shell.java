@@ -22,7 +22,7 @@ public class Shell {
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException, URISyntaxException{
         String pathname = "file/07_memory_management.pdf";
 	URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
-        //URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
+        //URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html ");
 
         HtmlFunction html = new HtmlFunction();
 	List<URL> lista = html.getURLList(url, ".pdf");
