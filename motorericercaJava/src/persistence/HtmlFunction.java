@@ -114,6 +114,8 @@ public class HtmlFunction {
         System.out.println("informazioni ppt Property: " +info.getProperties());
         //System.out.println(pptext.getText(true, true));
 
+        System.out.println("------------");
+
         return documentoPpt;
 
     }
@@ -170,7 +172,7 @@ public class HtmlFunction {
         //La data di creazione di un pdf coincide con la data di modifica del documento
         System.out.println("Creation Date: " + info.getCreationDate().getTime());
 */
- System.out.println("------------");
+        System.out.println("------------");
 
 	pdf.close();
 

@@ -21,15 +21,15 @@ public class Shell {
 
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException, URISyntaxException{
         String pathname = "file/07_memory_management.pdf";
-	URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
-        //URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
+	//URL url = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
+        URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
 
         HtmlFunction html = new HtmlFunction();
-	List<URL> lista = html.getURLList(url, ".pdf");
+	List<URL> lista = html.getURLList(url, ".ppt");
 
 	System.out.println("isEmpty: " + lista.isEmpty());
 	for (int i=0; i<lista.size(); i++){
-		html.getPDFinfo(lista.get(i));
+		html.getPPTinfo(lista.get(i));
 	}
 
         //html.getPPTinfo(url);
