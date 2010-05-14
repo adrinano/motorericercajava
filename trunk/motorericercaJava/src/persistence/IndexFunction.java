@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
-import modello.DocumentoPptBean;
-import modello.DocumentoPdfBean;
+import modello.DocumentoBean;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.demo.HTMLDocument;
 import org.apache.lucene.document.Document;
@@ -51,14 +50,12 @@ public class IndexFunction{
     /**
      * indicizzazione del contenuto delle tabelle prese dal sito
      */
-    public void indicizza(List<DocumentoPdfBean> listDocumentiPdf, List<DocumentoPptBean> listDocumentiPpt, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void indicizza(List<DocumentoBean> listDocumenti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
-        Iterator<DocumentoPptBean> iteratorPpt = listDocumentiPpt.iterator();
-        Iterator<DocumentoPdfBean> iteratorPdf = listDocumentiPdf.iterator();
-        while(iteratorPdf.hasNext()){
-            System.out.println("Titolo pdf:" + iteratorPdf.next().getTitolo());
-        }
+        Iterator<DocumentoBean> iteratorPpt = listDocumenti.iterator();
+        //Iterator<DocumentoPdfBean> iteratorPdf = listDocumentiPdf.iterator();
+        
         while(iteratorPpt.hasNext()){
             //addDoc(null, create);
             System.out.println("Titolo ppt " + iteratorPpt.next().getTitolo());
