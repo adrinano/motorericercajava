@@ -12,26 +12,43 @@ import java.util.Date;
  *
  * @author palla
  */
-public class DocumentoPptBean {
+public class DocumentoBean {
 
 
     private String applicazione;
     private String autore;
-    private String commenti;
+    //private String commenti;
     private String keywords;
     private String ultimoAutore;
     private String numeroRevisione;
     private String oggetto;
-    private String template;
+    //private String template;
     private String titolo;
     private Date dataCreazione;
-    private Date dataEdit;
+    private Date dataEdit;              //servirebbe un long invece di un date... ma ci serve???
     private Date dataModifica;
-    private String conteggioPagine;
-    private String proprieta;
+    //private int conteggioPagine;
+    //private String proprieta;
     private String TipoFile;
+    private String contenuto;
+    private String percorso;
 
+    
+    public String getPercorso() {
+        return percorso;
+    }
 
+    public void setPercorso(String percorso) {
+        this.percorso = percorso;
+    }
+
+    public String getContenuto() {
+        return contenuto;
+    }
+
+    public void setContenuto(String contenuto) {
+        this.contenuto = contenuto;
+    }
 
     public String getTipoFile() {
         return TipoFile;
@@ -57,21 +74,21 @@ public class DocumentoPptBean {
         this.autore = autore;
     }
 
-    public String getCommenti() {
-        return commenti;
+    /*public String getCommenti() {
+    return commenti;
     }
 
     public void setCommenti(String commenti) {
-        this.commenti = commenti;
+    this.commenti = commenti;
     }
 
-    public String getConteggioPagine() {
-        return conteggioPagine;
+    public int getConteggioPagine() {
+    return conteggioPagine;
     }
 
-    public void setConteggioPagine(String conteggioPagine) {
-        this.conteggioPagine = conteggioPagine;
-    }
+    public void setConteggioPagine(int conteggioPagine) {
+    this.conteggioPagine = conteggioPagine;
+    }*/
 
     public Date getDataCreazione() {
         return dataCreazione;
@@ -120,7 +137,7 @@ public class DocumentoPptBean {
     public void setOggetto(String oggetto) {
         this.oggetto = oggetto;
     }
-
+/*
     public String getProprieta() {
         return proprieta;
     }
@@ -136,7 +153,7 @@ public class DocumentoPptBean {
     public void setTemplate(String template) {
         this.template = template;
     }
-
+*/
     public String getTitolo() {
         return titolo;
     }
