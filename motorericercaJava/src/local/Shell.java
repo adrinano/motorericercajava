@@ -25,11 +25,11 @@ public class Shell {
         URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
 
         HtmlFunction html = new HtmlFunction();
-	List<URL> lista = html.getURLList(url, ".ppt");
+	List<URL> lista = html.getURLList(url, ".pdf");
 
 	System.out.println("isEmpty: " + lista.isEmpty());
 	for (int i=0; i<lista.size(); i++){
-		html.getPPTinfo(lista.get(i));
+		html.getPDFinfo(lista.get(i));
 	}
 
         //html.getPPTinfo(url);
