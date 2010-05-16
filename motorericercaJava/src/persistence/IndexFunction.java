@@ -10,7 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modello.DocumentoBean;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.demo.HTMLDocument;
@@ -24,6 +27,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.RAMDirectory;
@@ -53,64 +57,50 @@ public class IndexFunction{
     public void indicizza(List<DocumentoBean> listDocumenti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
-        Iterator<DocumentoBean> iteratorPpt = listDocumenti.iterator();
-        //Iterator<DocumentoPdfBean> iteratorPdf = listDocumentiPdf.iterator();
+        Iterator<DocumentoBean> iterator = listDocumenti.iterator();
         
-        while(iteratorPpt.hasNext()){
-            //addDoc(null, create);
-            System.out.println("Titolo ppt " + iteratorPpt.next().getTitolo());
+        while(iterator.hasNext()){
+            addDoc(iterator.next(), indexWriter);
+            //System.out.println("Titolo ppt " + iterator.next().getTitolo());
         }
+        indexWriter.optimize();
+        indexWriter.close();
     }
 
 
     /**
      * Aggiunge il documento da indicizzare
      */
-    private void addDoc(File fileDir, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
-
-        IndexWriter indexWriter = new IndexWriter(indexDir,luceneAnalyzer,create, IndexWriter.MaxFieldLength.LIMITED);
-
-        File[] textFiles = fileDir.listFiles();
-        System.out.println(fileDir.getName());
-        System.out.println("Nome textFiles: " + textFiles[0].getName());
+    private void addDoc(DocumentoBean documento, IndexWriter indexWriter) throws CorruptIndexException, LockObtainFailedException, IOException{
 
         //Add documents to the index
-        for(int i = 0; i < textFiles.length; i++){
-          if(textFiles[i].isFile() && textFiles[i].getName().endsWith(".html")){
+	try {
+            if(documento != null){
+                Document document = new Document();
+                System.out.println("The document " + documento.getTitolo() + " is being indexed");
 
-              System.out.println(textFiles[i].getName().endsWith(".html"));
+                if (documento.getTitolo()!=null){
+                    document.add(new Field("title", documento.getTitolo(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("title", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+                
+                document.add(new Field("content", documento.getContenuto(), Field.Store.YES, Field.Index.ANALYZED));
+                document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
-              Reader fileReader = null;
+                indexWriter.addDocument(document);
+                System.out.println("Path document added: " + documento.getPercorso());
+                System.out.println("------------");
+            }
 
-              try {
-                  Document document = new Document();
-                  System.out.println("File " + textFiles[i].getCanonicalPath() + " is being indexed");
-
-                  fileReader = new FileReader(textFiles[i]);
-
-                  String str = HTMLDocument.uid(fileDir);
-                  //HTMLParser html = new HTMLParser(fileReader);
-                  //html.ReInit(fileReader);
-                  System.out.println(str);
-
-                  document.add(new Field("content", str, Field.Store.YES, Field.Index.ANALYZED));
-                  document.add(new Field("path", textFiles[i].getName(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-
-                  indexWriter.addDocument(document);
-                  System.out.println("Added: " + textFiles[i].getName());
-
-              }catch (Exception e) {
-                  System.out.println("Could not add: " + fileDir);
-              }finally {
-                  indexWriter.optimize();
-                  indexWriter.close();
-              }
-
-          }
-        }
-
-
-
+	}catch (Exception e) {
+            System.out.println("Could not add: " + documento.getPercorso());
+            Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Catch index!", e);
+            System.out.println("------------");
+	}finally {
+            //indexWriter.optimize(10);
+            //indexWriter.close();
+	}
     }
 
     /**
@@ -121,34 +111,43 @@ public class IndexFunction{
      * @throws IOException
      * @throws ParseException
      */
-    public void search(String field, String querystr) throws CorruptIndexException, IOException, ParseException {
+    public LinkedList<DocumentoBean> search(String querystr) throws CorruptIndexException, IOException, ParseException {
 
-        int hitsPerPage = 20;
-
+        int hitsPerPage = 500;
+        LinkedList<DocumentoBean> lst = new LinkedList();
         IndexSearcher searcher = new IndexSearcher(indexDir, true);
 
         //String sentence = JOptionPane.showInputDialog(querystr);
-        QueryParser queryParser = new QueryParser(Version.LUCENE_30, field, luceneAnalyzer);
-
+        QueryParser queryParser = new QueryParser(Version.LUCENE_30, "content", luceneAnalyzer);
         queryParser.setDefaultOperator(QueryParser.Operator.AND);
-
-        Query query = queryParser.parse(querystr + " ");
-        TopDocs topDocs = searcher.search(query,1000);
+        Query query = queryParser.parse(querystr);
+        
+        //TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
         //searcher.search(query, collector);
         //ScoreDoc[] hits = collector.topDocs().scoreDocs;
+        TopDocs topDocs = searcher.search(query,hitsPerPage);
         ScoreDoc[] hits = topDocs.scoreDocs;
 
         // 4. display results
-        System.out.println("Found " + hits.length + " hits.");
+        System.out.println("Found " + hits.length + " hits...");
         for(int i=0;i<hits.length;++i) {
+            DocumentoBean db = new DocumentoBean();
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
-            System.out.println((i + 1) + ". " + d.get(field) + " Field: " + field);
+            //System.out.println((i + 1) + ". " + d.get("path"));
+
+            db.setPercorso(d.get("path"));
+            db.setContenuto(d.get("content"));
+            db.setTitolo(d.get("title"));
+
+            lst.add(db);
         }
 
         // searcher can only be closed when there
         // is no need to access the documents any more.
         searcher.close();
+
+        return lst;
     }
 
 
