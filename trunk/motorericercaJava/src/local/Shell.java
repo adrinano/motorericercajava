@@ -63,7 +63,7 @@ public class Shell {
         System.out.print(" ");
         System.out.println("------------");
         System.out.println("------------");
-        index.indicizza(listaDocumenti, true);
+        index.indicizza(listaDocumenti);
         //html.getPPTinfo(url);
         //File file = new File(pathname);
         //Document doc = new Document();
