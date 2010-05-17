@@ -5,6 +5,7 @@
 
 package persistence;
 
+import java.io.File;
 import java.io.IOException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
@@ -16,19 +17,41 @@ import org.apache.lucene.store.IndexOutput;
  */
 public class MyDirectory extends Directory{
 
+    private File directory;
+
+
+    /**
+     *
+     */
+    public MyDirectory(String indirizzo) {
+
+        this.directory = new File(indirizzo);
+
+    }
+
+
     @Override
     public String[] listAll() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        String[] listaFile = directory.list() ;
+
+        return listaFile;
     }
 
     @Override
     public boolean fileExists(String string) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        String[] lista = listAll();
+        for(int i=0;i<lista.length;i++) {
+            if (lista[i].contains(string))
+                return true;
+        }
+        return false;
     }
 
     @Override
     public long fileModified(String string) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 124; //ovviamente da cambiare
     }
 
     @Override
