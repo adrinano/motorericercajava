@@ -5,6 +5,7 @@
 
 package persistence;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,7 +26,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
 /**
@@ -35,26 +38,22 @@ import org.apache.lucene.util.Version;
 public class IndexFunction{
 
     private Analyzer luceneAnalyzer;
-    private Directory indexDir;
-    private IndexWriter indexWriter;
-    
+    private FSDirectory indexDir;
 
     public IndexFunction() throws CorruptIndexException, LockObtainFailedException, IOException {
         //imposto la versione di Lucene
-        this.luceneAnalyzer = new StandardAnalyzer(Version.LUCENE_30);
+        this.luceneAnalyzer = new MyAnalyzer();
         //indexDir indica che Lucene crea l'index in memoria principale
-        this.indexDir = new MyDirectory();
-
-        this.indexWriter = new IndexWriter(indexDir, luceneAnalyzer, IndexWriter.MaxFieldLength.LIMITED);
+        this.indexDir = FSDirectory.open(new File("config/index.writer"));
     }
 
 
     /**
      * indicizzazione del contenuto delle tabelle prese dal sito
      */
-    public void indicizza(List<DocumentoBean> listDocumenti, boolean create) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void indicizza(List<DocumentoBean> listDocumenti) throws CorruptIndexException, LockObtainFailedException, IOException{
 
-        
+        IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, IndexWriter.MaxFieldLength.LIMITED);
         Iterator<DocumentoBean> iterator = listDocumenti.iterator();
         
         while(iterator.hasNext()){
