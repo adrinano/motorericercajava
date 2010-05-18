@@ -134,14 +134,13 @@ public class IndexFunction{
                 }
 
                 if(documento.getDataCreazione()!=null){
-                    long d = documento.getDataCreazione().getTime();
-                    document.add(new Field("creationDate", "" , Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    document.add(new Field("creationDate", Long.toString(documento.getDataCreazione().getTime()) , Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }else{
                     document.add(new Field("creationDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
 
                 if(documento.getDataModifica()!=null){
-                    document.add(new Field("editDate", documento.getDataModifica().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    document.add(new Field("editDate", Long.toString(documento.getDataModifica().getTime()), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }else{
                     document.add(new Field("editDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
@@ -202,9 +201,14 @@ public class IndexFunction{
             db.setTitolo(d.get("title"));
             db.setApplicazione(d.get("application"));
             db.setAutore(d.get("author"));
-            db.setDataCreazione(new Date (d.get("creationDate")));
-
-
+            db.setDataCreazione(new Date(Long.getLong(d.get("creationDate"))));
+            db.setDataModifica(new Date(Long.getLong(d.get("editDate"))));
+            db.setKeywords(d.get("key"));
+            db.setTipoFile(d.get("typeFile"));
+            db.setNumeroRevisione(d.get("revision"));
+            db.setUltimoAutore(d.get("lastAuthor"));
+            db.setOggetto(d.get("object"));
+            
             lst.add(db);
         }
 
