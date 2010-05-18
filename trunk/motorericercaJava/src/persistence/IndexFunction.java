@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -82,15 +83,74 @@ public class IndexFunction{
                 Document document = new Document();
                 System.out.println("The document " + documento.getTitolo() + " is being indexed");
 
+                document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+
                 if (documento.getTitolo()!=null){
                     document.add(new Field("title", documento.getTitolo(), Field.Store.YES, Field.Index.ANALYZED));
                 }else{
                     document.add(new Field("title", eliminaInizioPath(documento.getPercorso()), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
 
+                if (documento.getContenuto()!=null){
+                    document.add(new Field("content", documento.getContenuto(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("content", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
                 
-                document.add(new Field("content", documento.getContenuto(), Field.Store.YES, Field.Index.ANALYZED));
-                document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                if(documento.getApplicazione()!=null){
+                    document.add(new Field("application", documento.getApplicazione(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }else{
+                    document.add(new Field("application", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+
+                if(documento.getAutore()!=null){
+                    document.add(new Field("author", documento.getAutore(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("autho", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+                
+                if(documento.getKeywords()!=null){
+                    document.add(new Field("key", documento.getKeywords(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("key", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+                
+                if(documento.getUltimoAutore()!=null){
+                    document.add(new Field("lastAuthor", documento.getUltimoAutore(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("lastAuthor", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+                
+                if(documento.getNumeroRevisione()!=null){
+                    document.add(new Field("revision", documento.getNumeroRevisione(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }else{
+                    document.add(new Field("revision", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+
+                if(documento.getOggetto()!=null){
+                    document.add(new Field("object", documento.getOggetto(), Field.Store.YES, Field.Index.ANALYZED));
+                }else{
+                    document.add(new Field("object", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+
+                if(documento.getDataCreazione()!=null){
+                    long d = documento.getDataCreazione().getTime();
+                    document.add(new Field("creationDate", "" , Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }else{
+                    document.add(new Field("creationDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+
+                if(documento.getDataModifica()!=null){
+                    document.add(new Field("editDate", documento.getDataModifica().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }else{
+                    document.add(new Field("editDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
+
+                if(documento.getTipoFile()!=null){
+                    document.add(new Field("typeFile", documento.getTipoFile(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }else{
+                    document.add(new Field("typeFile", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                }
 
                 indexWriter.addDocument(document);
                 System.out.println("Path document added: " + documento.getPercorso());
@@ -140,6 +200,10 @@ public class IndexFunction{
             db.setPercorso(d.get("path"));
             db.setContenuto(d.get("content"));
             db.setTitolo(d.get("title"));
+            db.setApplicazione(d.get("application"));
+            db.setAutore(d.get("author"));
+            db.setDataCreazione(new Date (d.get("creationDate")));
+
 
             lst.add(db);
         }
