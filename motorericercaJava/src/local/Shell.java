@@ -30,17 +30,20 @@ public class Shell {
         //String pathname = "file/07_memory_management.pdf";
 
         URL url1 = new URL("http://torlone.dia.uniroma3.it/calcolatori/materiale.html");
-        URL url2 = new URL("http://www.dia.uniroma3.it/~pizzonia/so/");
+        URL url2 = new URL("http://cialdea.dia.uniroma3.it/teaching/pf/materiale/slides/pdf/");
+        //http://www.dia.uniroma3.it/~pizzonia/so/
         //URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
 
         HtmlFunction html = new HtmlFunction();
         IndexFunction index = new IndexFunction();
         LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
 
-        esegui(url1, index, html, listaDocumenti);
+        //esegui(url1, index, html, listaDocumenti);
         esegui(url2, index, html, listaDocumenti);
 
-        listaDocumenti = index.search("RAID");
+        index.search("tree");
+
+        listaDocumenti = index.getDocumentList();
 
         Collections.sort(listaDocumenti, new ComparatoreDocumentiBean());
         Iterator<DocumentoBean> iterator = listaDocumenti.iterator();
@@ -60,7 +63,7 @@ public class Shell {
             System.out.print(i + " ");
             listaDocumenti.add(html.getPDFinfo(lista.get(i)));
         }
-        System.out.print(" ");
+        System.out.println(" ");
         System.out.println("------------");
         System.out.println("------------");
         index.indicizza(listaDocumenti);

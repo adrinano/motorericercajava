@@ -7,6 +7,8 @@ package persistence;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,12 +38,18 @@ public class IndexFunction{
 
     private Analyzer luceneAnalyzer;
     private FSDirectory indexDir;
+    private LinkedList<DocumentoBean> lst;
 
     public IndexFunction() throws CorruptIndexException, LockObtainFailedException, IOException {
         //imposto la versione di Lucene
         this.luceneAnalyzer = new MyAnalyzer();
-        //indexDir indica che Lucene crea l'index in memoria principale
+        
+        //indexDir indica che Lucene crea l'index su FileSystem
         this.indexDir = FSDirectory.open(new File("config/index.writer"));
+        
+        
+        //lista dei socumenti
+        this.lst = new LinkedList<DocumentoBean>();
     }
 
 
@@ -50,7 +58,8 @@ public class IndexFunction{
      */
     public void indicizza(List<DocumentoBean> listDocumenti) throws CorruptIndexException, LockObtainFailedException, IOException{
 
-        IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, IndexWriter.MaxFieldLength.LIMITED);
+        //crea l'indexWriter. il true determina che l'index viene riscritto quando si chiede di indicizzare
+        IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, true, IndexWriter.MaxFieldLength.LIMITED);
         Iterator<DocumentoBean> iterator = listDocumenti.iterator();
         
         while(iterator.hasNext()){
@@ -76,8 +85,9 @@ public class IndexFunction{
                 if (documento.getTitolo()!=null){
                     document.add(new Field("title", documento.getTitolo(), Field.Store.YES, Field.Index.ANALYZED));
                 }else{
-                    document.add(new Field("title", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    document.add(new Field("title", eliminaInizioPath(documento.getPercorso()), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
+
                 
                 document.add(new Field("content", documento.getContenuto(), Field.Store.YES, Field.Index.ANALYZED));
                 document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -91,9 +101,6 @@ public class IndexFunction{
             System.out.println("Could not add: " + documento.getPercorso());
             Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Catch index!", e);
             System.out.println("------------");
-	}finally {
-            //indexWriter.optimize(10);
-            //indexWriter.close();
 	}
     }
 
@@ -105,10 +112,9 @@ public class IndexFunction{
      * @throws IOException
      * @throws ParseException
      */
-    public LinkedList<DocumentoBean> search(String querystr) throws CorruptIndexException, IOException, ParseException {
+    public void search(String querystr) throws CorruptIndexException, IOException, ParseException {
 
         int hitsPerPage = 500;
-        LinkedList<DocumentoBean> lst = new LinkedList();
         IndexSearcher searcher = new IndexSearcher(indexDir, true);
 
         //String sentence = JOptionPane.showInputDialog(querystr);
@@ -123,6 +129,7 @@ public class IndexFunction{
         ScoreDoc[] hits = topDocs.scoreDocs;
 
         // 4. display results
+        lst.clear();
         System.out.println("Found " + hits.length + " hits...");
         for(int i=0;i<hits.length;++i) {
             DocumentoBean db = new DocumentoBean();
@@ -140,11 +147,51 @@ public class IndexFunction{
         // searcher can only be closed when there
         // is no need to access the documents any more.
         searcher.close();
+    }
 
+    /**
+     * Ritorna la lista dei documenti cercati
+     * @return
+     */
+    public LinkedList<DocumentoBean> getDocumentList(){
         return lst;
     }
 
+    /**
+     * elimina la parte iniziale del path per avere il nome dil file
+     * @param path
+     * @return
+     */
+    private String eliminaInizioPath(String path){
+        File fileName = null;
+        try {
+            URL url = new URL(path);
+             fileName = new File(url.toString());
+            
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return fileName.getName();
+    }
 
-
-
+    /**
+     * Deletes all files and subdirectories under dir.
+     * Returns true if all deletions were successful.
+     * If a deletion fails, the method stops attempting to delete and returns false.
+     * @param dir
+     * @return
+     */
+    private boolean deleteDir(File dir) {
+	if (dir.isDirectory()) {
+		String[] children = dir.list();
+		for (int i=0; i<children.length; i++) {
+			boolean success = deleteDir(new File(dir, children[i]));
+			if (!success) {
+				return false;
+			}
+		}
+	}
+	// The directory is now empty so delete it
+	return dir.delete();
+    }
 }
