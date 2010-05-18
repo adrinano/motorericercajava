@@ -25,7 +25,7 @@ public class DocumentoBean {
     //private String template;
     private String titolo;
     private Date dataCreazione;
-    private Date dataEdit;              //servirebbe un long invece di un date... ma ci serve???
+    //private Date dataEdit;              //servirebbe un long invece di un date... ma ci serve???
     private Date dataModifica;
     //private int conteggioPagine;
     //private String proprieta;
@@ -96,14 +96,6 @@ public class DocumentoBean {
 
     public void setDataCreazione(Date dataCreazione) {
         this.dataCreazione = dataCreazione;
-    }
-
-    public Date getDataEdit() {
-        return dataEdit;
-    }
-
-    public void setDataEdit(Date dataEdit) {
-        this.dataEdit = dataEdit;
     }
 
     public Date getDataModifica() {

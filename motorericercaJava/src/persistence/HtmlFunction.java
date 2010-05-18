@@ -105,7 +105,7 @@ public class HtmlFunction {
             } else {
                 documentoPpt.setDataCreazione(null);
             }
-            documentoPpt.setDataEdit(new Date(info.getEditTime()));
+            
             if (info.getLastSaveDateTime() != null) {
                 documentoPpt.setDataModifica(info.getLastSaveDateTime());
             } else {
@@ -183,10 +183,8 @@ public class HtmlFunction {
             //documentoPdf.setDataCreazione(info.getCreationDate().getTime());
             if (info.getModificationDate() != null) {
                 documentoPdf.setDataModifica(info.getModificationDate().getTime());
-                documentoPdf.setDataEdit(info.getModificationDate().getTime()); //stesso di Modifica
             } else {
                 documentoPdf.setDataModifica(null);
-                documentoPdf.setDataEdit(null);
             }
             //documentoPdf.setDataModifica(info.getModificationDate().getTime());
             //documentoPdf.setDataEdit(info.getModificationDate().getTime());     //stesso di Modifica
