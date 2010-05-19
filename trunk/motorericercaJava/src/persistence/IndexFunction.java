@@ -172,7 +172,7 @@ public class IndexFunction{
      * @throws IOException
      * @throws ParseException
      */
-    public void search(String querystr) throws CorruptIndexException, IOException, ParseException {
+    public boolean search(String querystr) throws CorruptIndexException, IOException, ParseException {
 
         int hitsPerPage = 500;
         IndexSearcher searcher = new IndexSearcher(indexDir, true);
@@ -220,11 +220,14 @@ public class IndexFunction{
             }
             
             lst.add(db);
+
         }
 
         // searcher can only be closed when there
         // is no need to access the documents any more.
         searcher.close();
+
+        return lst.isEmpty();
     }
 
     /**
