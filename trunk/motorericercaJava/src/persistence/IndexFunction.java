@@ -63,6 +63,7 @@ public class IndexFunction{
 
         //crea l'indexWriter. il true determina che l'index viene riscritto quando si chiede di indicizzare
         IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+        indexWriter.setUseCompoundFile(false);
         Iterator<DocumentoBean> iterator = listDocumenti.iterator();
         
         while(iterator.hasNext()){
@@ -213,12 +214,12 @@ public class IndexFunction{
             if(d.get("creationDate").equals("Campo Nullo!")){
                 db.setDataCreazione(null);
             }else{
-                db.setDataCreazione(new Date(Long.getLong(d.get("creationDate"))));
+                db.setDataCreazione(null);
             }
             if(d.get("editDate").equals("Campo Nullo!")){
                 db.setDataModifica(null);
             }else{
-                db.setDataModifica(new Date(Long.getLong(d.get("editDate"))));
+                db.setDataModifica(null);
             }
             
             lst.add(db);

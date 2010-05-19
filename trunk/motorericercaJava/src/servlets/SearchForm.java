@@ -34,7 +34,7 @@ public class SearchForm extends HttpServlet{
         AvviaRicerca ar = new AvviaRicerca();
         if (form.controllo()){
             try {
-               if(ar.avviaAzione(request)){
+               if(!ar.avviaAzione(request)){
                    prossimaPagina="index.jsp";
                }else{
                    prossimaPagina = "reults.jsp";

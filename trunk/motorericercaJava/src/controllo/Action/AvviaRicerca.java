@@ -6,6 +6,8 @@
 package controllo.Action;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
@@ -21,7 +23,9 @@ public class AvviaRicerca {
     public boolean avviaAzione(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
 
         IndexThread it = new IndexThread();
-        it.run();
+        Timer t = new Timer(true);
+        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 86400000);
+
 
         IndexFunction index = new IndexFunction();
 
