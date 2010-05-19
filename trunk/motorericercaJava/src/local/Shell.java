@@ -44,7 +44,7 @@ public class Shell {
 
         listaDocumenti = index.getDocumentList();
 
-        Collections.sort(listaDocumenti, new ComparatoreDocumentiBean());
+        
         Iterator<DocumentoBean> iterator = listaDocumenti.iterator();
 
         while(iterator.hasNext()){

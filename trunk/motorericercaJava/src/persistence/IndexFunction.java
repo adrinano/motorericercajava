@@ -9,12 +9,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modello.ComparatoreDocumentiBean;
 import modello.DocumentoBean;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -235,6 +237,7 @@ public class IndexFunction{
      * @return
      */
     public LinkedList<DocumentoBean> getDocumentList(){
+        Collections.sort(lst, new ComparatoreDocumentiBean());
         return lst;
     }
 
