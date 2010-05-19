@@ -10,8 +10,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modello.DocumentoBean;
@@ -24,13 +28,16 @@ import persistence.IndexFunction;
  *
  * @author palla
  */
-public class IndexThread extends Thread{
+public class IndexThread extends TimerTask{
 
     public IndexThread(){
-        super("Index Thred");
+        
     }
 
+    @Override
     public void run(){
+
+        
         HtmlFunction html = new HtmlFunction();
         IndexFunction index = null;
         try {
@@ -42,17 +49,21 @@ public class IndexThread extends Thread{
         } catch (IOException ex) {
             Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         List<URL> urlist = getURLList();
-        URL url = null;
         LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
-        try {
-            esegui(url, index, html, listaDocumenti);
-            esegui(url, index, html, listaDocumenti);
-        } catch (IOException ex) {
-            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+        Iterator<URL> iterator = urlist.iterator();
+
+        while (iterator.hasNext()){
+            try {
+                esegui(iterator.next(), index, html, listaDocumenti);
+            } catch (IOException ex) {
+                Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
     }
 
     private static void esegui(URL url, IndexFunction index, HtmlFunction html, LinkedList<DocumentoBean> listaDocumenti) throws IOException, URISyntaxException {
