@@ -134,6 +134,7 @@ public class IndexFunction{
                 }
 
                 if(documento.getDataCreazione()!=null){
+                    System.out.println(documento.getDataCreazione().getTime());
                     document.add(new Field("creationDate", Long.toString(documento.getDataCreazione().getTime()) , Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }else{
                     document.add(new Field("creationDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -176,14 +177,11 @@ public class IndexFunction{
         int hitsPerPage = 500;
         IndexSearcher searcher = new IndexSearcher(indexDir, true);
 
-        //String sentence = JOptionPane.showInputDialog(querystr);
         QueryParser queryParser = new QueryParser(Version.LUCENE_30, "content", luceneAnalyzer);
         queryParser.setDefaultOperator(QueryParser.Operator.AND);
         Query query = queryParser.parse(querystr);
         
-        //TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-        //searcher.search(query, collector);
-        //ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
         TopDocs topDocs = searcher.search(query,hitsPerPage);
         ScoreDoc[] hits = topDocs.scoreDocs;
 
@@ -201,13 +199,25 @@ public class IndexFunction{
             db.setTitolo(d.get("title"));
             db.setApplicazione(d.get("application"));
             db.setAutore(d.get("author"));
-            db.setDataCreazione(new Date(Long.getLong(d.get("creationDate"))));
-            db.setDataModifica(new Date(Long.getLong(d.get("editDate"))));
             db.setKeywords(d.get("key"));
             db.setTipoFile(d.get("typeFile"));
             db.setNumeroRevisione(d.get("revision"));
             db.setUltimoAutore(d.get("lastAuthor"));
             db.setOggetto(d.get("object"));
+
+            //La data di creazione e la data di modifica sono oggetti di tipo Date
+            //Se sono null non possono accettare una stringa per creare l'oggetto
+            //Tocca controllare questa situazione per settare i campi nell'oggetto DocumentoBean
+            if(d.get("creationDate").equals("Campo Nullo!")){
+                db.setDataCreazione(null);
+            }else{
+                db.setDataCreazione(new Date(Long.getLong(d.get("creationDate"))));
+            }
+            if(d.get("editDate").equals("Campo Nullo!")){
+                db.setDataModifica(null);
+            }else{
+                db.setDataModifica(new Date(Long.getLong(d.get("editDate"))));
+            }
             
             lst.add(db);
         }
@@ -242,24 +252,5 @@ public class IndexFunction{
         return fileName.getName();
     }
 
-    /**
-     * Deletes all files and subdirectories under dir.
-     * Returns true if all deletions were successful.
-     * If a deletion fails, the method stops attempting to delete and returns false.
-     * @param dir
-     * @return
-     */
-    private boolean deleteDir(File dir) {
-	if (dir.isDirectory()) {
-		String[] children = dir.list();
-		for (int i=0; i<children.length; i++) {
-			boolean success = deleteDir(new File(dir, children[i]));
-			if (!success) {
-				return false;
-			}
-		}
-	}
-	// The directory is now empty so delete it
-	return dir.delete();
-    }
+    
 }
