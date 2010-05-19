@@ -28,7 +28,7 @@ public class Shell {
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException, URISyntaxException{
         //String pathname = "file/07_memory_management.pdf";
 
-        URL url1 = new URL("http://torlone.dia.uniroma3.it/calcolatori/materiale.html");
+        URL url = new URL("http://torlone.dia.uniroma3.it/calcolatori/materiale.html");
         URL url2 = new URL("http://cialdea.dia.uniroma3.it/teaching/pf/materiale/slides/pdf/");
         //http://www.dia.uniroma3.it/~pizzonia/so/
         //URL url = new URL("http://www.dia.uniroma3.it/~atzeni/didattica/SINF/20092010/Programma.html");
@@ -38,7 +38,7 @@ public class Shell {
         LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
 
         //esegui(url1, index, html, listaDocumenti);
-        esegui(url2, index, html, listaDocumenti);
+        esegui(url, index, html, listaDocumenti);
 
         index.search("tree");
 
@@ -57,12 +57,19 @@ public class Shell {
     private static void esegui(URL url, IndexFunction index, HtmlFunction html, LinkedList<DocumentoBean> listaDocumenti) throws IOException, URISyntaxException {
 
         List<URL> lista = html.getURLList(url, ".pdf");
-        System.out.println("isEmpty: " + lista.isEmpty() + "Elements number: " + lista.size());
+        
         for (int i = 0; i < lista.size(); i++) {
             System.out.print(i + " ");
             listaDocumenti.add(html.getPDFinfo(lista.get(i)));
         }
-        System.out.println(" ");
+        List<URL> listaPPT = html.getURLList(url, ".ppt");
+        for (int i = 0; i < listaPPT.size(); i++) {
+            listaDocumenti.add(html.getPPTinfo(listaPPT.get(i)));
+        }
+
+        System.out.println("isEmpty: " + lista.isEmpty() + "Elements pdf number: " + lista.size());
+        System.out.println("isEmpty: " + listaPPT.isEmpty() + "Elements ppt number: " + listaPPT.size());
+        System.out.println("Size list: " + listaDocumenti.size());
         System.out.println("------------");
         System.out.println("------------");
         index.indicizza(listaDocumenti);
