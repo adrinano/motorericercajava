@@ -28,13 +28,12 @@ import persistence.IndexFunction;
  *
  * @author palla
  */
-public class IndexThread extends TimerTask{
+public class IndexThread{
 
     public IndexThread(){
         
     }
 
-    @Override
     public void run(){
 
         
