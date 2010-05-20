@@ -229,7 +229,7 @@ public class IndexFunction{
         // searcher can only be closed when there
         // is no need to access the documents any more.
         searcher.close();
-
+        System.out.println("search: " + lst.size());
         return lst.isEmpty();
     }
 
@@ -239,6 +239,7 @@ public class IndexFunction{
      */
     public LinkedList<DocumentoBean> getDocumentList(){
         Collections.sort(lst, new ComparatoreDocumentiBean());
+        System.out.println("gatDocumentList: " + lst.size());
         return lst;
     }
 
