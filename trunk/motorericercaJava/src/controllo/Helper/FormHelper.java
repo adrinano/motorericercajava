@@ -17,7 +17,7 @@ public class FormHelper {
 
     public FormHelper(HttpServletRequest request)throws ServletException {
 
-        this.form = request.getParameter("searchform");
+        this.form = request.getParameter("search");
     }
 
     public boolean controllo (){
