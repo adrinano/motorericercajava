@@ -33,16 +33,18 @@ public class Shell {
 
         IndexThread it = new IndexThread();
 
-        Timer t = new Timer(true);
-        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 1000);
+//        Timer t = new Timer(true);
+//        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 180000);
 
+        //it.run();
         System.out.println("dopo lo sleep");
         IndexFunction index = new IndexFunction();
-        index.search("RAID");
-        LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
-        listaDocumenti = index.getDocumentList();
 
-        
+        index.search("Ram");
+
+        LinkedList<DocumentoBean> lista = new LinkedList<DocumentoBean>();
+        System.out.println(lista.size());
+        LinkedList<DocumentoBean> listaDocumenti = index.getDocumentList();
         Iterator<DocumentoBean> iterator = listaDocumenti.iterator();
 
         while(iterator.hasNext()){
