@@ -24,7 +24,7 @@ public class AvviaRicerca {
 
         IndexThread it = new IndexThread();
         Timer t = new Timer(true);
-        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 86400000);
+        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 10000);
 
 
         IndexFunction index = new IndexFunction();

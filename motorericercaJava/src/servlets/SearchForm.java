@@ -35,9 +35,9 @@ public class SearchForm extends HttpServlet{
         if (form.controllo()){
             try {
                if(!ar.avviaAzione(request)){
-                   prossimaPagina="index.jsp";
+                   prossimaPagina="/index.jsp";
                }else{
-                   prossimaPagina = "reults.jsp";
+                   prossimaPagina = "/results.jsp";
                }
             } catch (ParseException ex) {
                 Logger.getLogger(SearchForm.class.getName()).log(Level.SEVERE, null, ex);
