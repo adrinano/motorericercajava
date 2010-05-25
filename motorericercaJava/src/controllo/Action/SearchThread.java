@@ -5,10 +5,19 @@
 
 package controllo.Action;
 
+import java.util.TimerTask;
+
 /**
  *
  * @author palla
  */
-public class SearchThread {
+public class SearchThread extends TimerTask{
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 
 }

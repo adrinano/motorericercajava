@@ -46,7 +46,19 @@ public class SearchForm extends HttpServlet{
                 System.out.println("Avvia Azione");
 
                 if(lst.isEmpty()==true){
-                   prossimaPagina="/index.jsp";
+                    response.setContentType("text/html");
+                    PrintWriter out = response.getWriter();
+                    out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+                    out.println("<head>");
+                    out.println("<title>Sherlock Tux - Results</title>");
+                    out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
+                    out.println("</head>");
+                    out.println("<body>\n <div id=\"result\">");
+                    out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!	</div>");
+                    out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
+                    out.println("</div>\n</div>\n</body>");
+                    out.println("</html>");
+                   
                 }else{
                    //prossimaPagina = "/Results/results.jsp";
                     response.setContentType("text/html");
@@ -58,13 +70,13 @@ public class SearchForm extends HttpServlet{
                     out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
                     out.println("</head>");
                     out.println("<body>\n <div id=\"result\">");
-                    out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!	</div>");
+                    out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!</div> <div id=\"results_number\"> Numbers results: " + lst.size() + "</div>");
                     out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
+
 
                     //risultato della ricerca
                    
                     Iterator<DocumentoBean> iterator = lst.iterator();
-                    out.println("risultati: " + lst.size());
                     while(iterator.hasNext()){
                         DocumentoBean doc = iterator.next();
                         out.println("<div class=\"post\">");
@@ -77,6 +89,7 @@ public class SearchForm extends HttpServlet{
 							out.println("<li><strong>Keywords</strong>:" + doc.getKeywords() +"</li>");
 							out.println("<li><strong>Subject</strong>:" + doc.getOggetto() +"</li>");
 							out.println("<li><strong>Creator</strong>:" + doc.getApplicazione() + "</li>");
+                                                        out.println("<li><strong>Contents</strong>:" + doc.getContenuto().substring(0, 300) + "</li>");
 						out.println("</ul>");
 					out.println("<hr />");
 					out.println("</div>");
