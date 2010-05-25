@@ -239,7 +239,7 @@ public class IndexFunction{
      */
     public LinkedList<DocumentoBean> getDocumentList(){
         Collections.sort(lst, new ComparatoreDocumentiBean());
-        System.out.println("gatDocumentList: " + lst.size());
+        System.out.println("getDocumentList: " + lst.size());
         return lst;
     }
 

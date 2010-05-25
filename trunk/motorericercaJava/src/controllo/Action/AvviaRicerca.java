@@ -23,10 +23,12 @@ import persistence.IndexFunction;
 public class AvviaRicerca {
 
     public LinkedList<DocumentoBean> avviaAzione(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
+        
+        Singleton s = Singleton.getInstance();
+        s.checkUpdate();
+        System.out.println("Esco dalla servlet!");
 
-//        IndexThread it = new IndexThread();
-//        Timer t = new Timer(true);
-//        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 168750);
+
 
 
         IndexFunction index = new IndexFunction();
