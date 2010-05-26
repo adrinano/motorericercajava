@@ -31,51 +31,39 @@ import persistence.IndexFunction;
  * @author palla
  */
 public class SearchForm extends HttpServlet{
-    private String prossimaPagina;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
-        
+        long startTime = System.currentTimeMillis();
         FormHelper form = new FormHelper(request);
         AvviaRicerca ar = new AvviaRicerca();
         LinkedList<DocumentoBean> lst;
-
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+        out.println("<head>");
+        out.println("<title>Sherlock Tux - Results</title>");
+        out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
+        out.println("</head>");
+        out.println("<body>\n <div id=\"result\">");
+        out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!</div> ");
         if (form.controllo()){
             try {
                 lst = ar.avviaAzione(request);
+                long endTime = System.currentTimeMillis();
                 System.out.println("Avvia Azione");
-
-                if(lst.isEmpty()==true){
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-                    out.println("<head>");
-                    out.println("<title>Sherlock Tux - Results</title>");
-                    out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
-                    out.println("</head>");
-                    out.println("<body>\n <div id=\"result\">");
-                    out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!	</div>");
+                if(lst.isEmpty()){
+                    out.println("<div id=\"results_number\">" + lst.size() + " results in " + (endTime-startTime) +" milliseconds</div>");
                     out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
-                    out.println("</div>\n</div>\n</body>");
-                    out.println("</html>");
+                    
                    
                 }else{
                    //prossimaPagina = "/Results/results.jsp";
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-                    out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-                    out.println("<head>");
-                    out.println("<title>Sherlock Tux - Results</title>");
-                    out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
-                    out.println("</head>");
-                    out.println("<body>\n <div id=\"result\">");
-                    out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!</div> <div id=\"results_number\"> Numbers results: " + lst.size() + "</div>");
+                    out.println("<div id=\"results_number\">" + lst.size() + " results in " + (endTime-startTime) +" milliseconds</div>");
                     out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
 
-
-                    //risultato della ricerca
-                   
+                    //risultato della ricerca                   
                     Iterator<DocumentoBean> iterator = lst.iterator();
                     while(iterator.hasNext()){
                         DocumentoBean doc = iterator.next();
@@ -89,19 +77,22 @@ public class SearchForm extends HttpServlet{
 							out.println("<li><strong>Keywords</strong>:" + doc.getKeywords() +"</li>");
 							out.println("<li><strong>Subject</strong>:" + doc.getOggetto() +"</li>");
 							out.println("<li><strong>Creator</strong>:" + doc.getApplicazione() + "</li>");
-                                                        out.println("<li><strong>Contents</strong>:" + doc.getContenuto().substring(0, 300) + "</li>");
+                                                        out.println("<li><strong>Contents</strong>: <p>" + doc.getContenuto().substring(0, 400) + " ...</p></li>");
 						out.println("</ul>");
 					out.println("<hr />");
 					out.println("</div>");
 				out.println("</div>");
                     }
-                    out.println("</div>\n</div>\n</body>");
-                    out.println("</html>");
-                }            
+                    
+                }
+
+                
             } catch (ParseException ex) {
                 Logger.getLogger(SearchForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        out.println("</div>\n</div>\n</body>");
+        out.println("</html>");
         
 //        ServletContext application  = getServletContext();
 //	RequestDispatcher rd =  application.getRequestDispatcher(prossimaPagina);
