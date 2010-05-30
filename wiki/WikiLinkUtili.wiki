@@ -5,3 +5,9 @@
 anche questo fa riferimento ad una vecchia versione, ma almeno per capire il funzionamento base...
 
 Curiosità: wikipedia usa Lucene per le ricerche full-text
+
+*http://lucene.apache.org/java/3_0_1/scoring.html
+*http://www.gossamer-threads.com/lists/lucene/java-user/4792
+*http://snowball.tartarus.org/algorithms/italian/stop.txt
+*http://it.how-to.mobi/index.php?id=120180
+*http://www.ranks.nl/stopwords/italian.html
