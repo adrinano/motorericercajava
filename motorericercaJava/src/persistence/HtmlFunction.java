@@ -16,7 +16,6 @@ import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,9 +25,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.poi.hpsf.SummaryInformation;
-//import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.extractor.PowerPointExtractor;
-//import org.apache.poi.hslf.usermodel.SlideShow;
 
 /**
  *
