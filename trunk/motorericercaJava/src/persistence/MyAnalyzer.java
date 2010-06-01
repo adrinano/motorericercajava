@@ -40,7 +40,7 @@ public class MyAnalyzer extends Analyzer{
         Set<String> stringSet = new HashSet<String>();
 
         try {
-            BufferedReader in = new BufferedReader(new FileReader("config/stopWord"));
+            BufferedReader in = new BufferedReader(new FileReader("webapps/sherlockTux/WEB-INF/config/stopWord"));
             String str;
             while ((str = in.readLine()) != null) {
 		stringSet.add(str);

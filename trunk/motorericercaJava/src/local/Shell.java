@@ -5,20 +5,25 @@
 
 package local;
 
-import controllo.Action.IndexThread;
+import com.steadystate.css.parser.ParseException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import modello.ComparatoreDocumentiBean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import modello.DocumentoBean;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.store.LockObtainFailedException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import persistence.HtmlFunction;
 import persistence.IndexFunction;
 
@@ -31,27 +36,13 @@ public class Shell {
 
     public static void main(String[] args) throws IOException, CorruptIndexException, ParseException, URISyntaxException, InterruptedException{
 
-        IndexThread it = new IndexThread();
+        //IndexThread it = new IndexThread();
 
 //        Timer t = new Timer(true);
 //        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 180000);
 
         //it.run();
-        System.out.println("dopo lo sleep");
-        IndexFunction index = new IndexFunction();
 
-        index.search("Ram");
-
-        LinkedList<DocumentoBean> lista = new LinkedList<DocumentoBean>();
-        System.out.println(lista.size());
-        LinkedList<DocumentoBean> listaDocumenti = index.getDocumentList();
-        Iterator<DocumentoBean> iterator = listaDocumenti.iterator();
-
-        while(iterator.hasNext()){
-            DocumentoBean doc = iterator.next();
-            System.out.println("Titolo:     " + doc.getTitolo());
-            System.out.println("Percorso:   " + doc.getPercorso());
-        }
         
     }
     

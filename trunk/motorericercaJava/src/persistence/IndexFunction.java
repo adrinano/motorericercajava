@@ -47,7 +47,7 @@ public class IndexFunction{
         this.luceneAnalyzer = new MyAnalyzer();
         
         //indexDir indica che Lucene crea l'index su FileSystem
-        this.indexDir = FSDirectory.open(new File("config/index.writer"));
+        this.indexDir = FSDirectory.open(new File("webapps/sherlockTux/WEB-INF/config/index.writer"));
         
         
         //lista dei socumenti
