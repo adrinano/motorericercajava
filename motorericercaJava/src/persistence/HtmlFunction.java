@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modello.DocumentoBean;
+import modello.SitoBean;
+import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -61,7 +63,7 @@ public class HtmlFunction {
                 }
 
                 lst.add(new URL( pathIniziale + anchors.get(i).getHrefAttribute()));
-                System.out.println("Si: " + pathIniziale + anchors.get(i).getHrefAttribute());
+                //System.out.println("Si: " + pathIniziale + anchors.get(i).getHrefAttribute());
             }
 
         }
@@ -81,14 +83,20 @@ public class HtmlFunction {
 
     /**
      * Funzione che restituisce le informazioni dei file PPT (libreria poi)
+     * 
+     * @param sb
      * @param url
-     * @throws IOException
+     * @return
      */
-    public DocumentoBean getPPTinfo (URL url){
+    public DocumentoBean getPPTinfo (SitoBean sb, URL url){
 
         DocumentoBean documentoPpt = new DocumentoBean();
 
         try {
+            WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
+            wc.getPage(url).getEnclosingWindow();
+
+
             URLConnection connection = url.openConnection();
             connection.connect();
             PowerPointExtractor pptext = new PowerPointExtractor(connection.getInputStream());
@@ -151,14 +159,13 @@ public class HtmlFunction {
      * @param url
      * @throws IOException
      */
-    public DocumentoBean getPDFinfo(URL url){
+    public DocumentoBean getPDFinfo(SitoBean sb, URL url){
         
         DocumentoBean documentoPdf = new DocumentoBean();
 
         try {
             URLConnection connection = url.openConnection();
             connection.connect();
-            
             PDDocument pdf = PDDocument.load(connection.getInputStream());
             //create a writer where to append the text content.
             StringWriter writer = new StringWriter();
