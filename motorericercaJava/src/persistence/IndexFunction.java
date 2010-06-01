@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modello.ComparatoreDocumentiBean;
@@ -21,13 +22,20 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Scorer;
+import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopDocsCollector;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.Weight;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
@@ -183,8 +191,31 @@ public class IndexFunction{
         queryParser.setDefaultOperator(QueryParser.Operator.AND);
         Query query = queryParser.parse(querystr);
         
+        
+        Weight weight = query.createWeight(searcher);   //viene associato un peso alla query
+        //TopDocs topDocs = searcher.search(query,hitsPerPage);     //senza il peso della query
+        TopDocs topDocs = searcher.search(weight, null, hitsPerPage);   //con il peso della query
+ /*       
+        PriorityQueue pq = new PriorityQueue();
+        TopDocsCollector topDocsCollector1 = new TopScoreDocCollector(pq) {
 
-        TopDocs topDocs = searcher.search(query,hitsPerPage);
+            @Override
+            public void collect(int i) throws IOException {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public boolean acceptsDocsOutOfOrder() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+*/        
+        TopDocsCollector topDocsCollector = TopScoreDocCollector.create(hitsPerPage, true);
+        IndexReader indexReader = searcher.getIndexReader();
+        Scorer scorer = weight.scorer(indexReader, true, true);
+        topDocsCollector.setScorer(scorer);
+        searcher.search(weight, null, topDocsCollector);
+        topDocs =topDocsCollector.topDocs();
         ScoreDoc[] hits = topDocs.scoreDocs;
 
         // 4. display results
@@ -206,6 +237,7 @@ public class IndexFunction{
             db.setNumeroRevisione(d.get("revision"));
             db.setUltimoAutore(d.get("lastAuthor"));
             db.setOggetto(d.get("object"));
+            db.setScore(hits[i].score);
 
             //La data di creazione e la data di modifica sono oggetti di tipo Date
             //Se sono null non possono accettare una stringa per creare l'oggetto

@@ -32,7 +32,16 @@ public class DocumentoBean {
     private String TipoFile;
     private String contenuto;
     private String percorso;
+    private float score;
 
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+    
     
     public String getPercorso() {
         return percorso;

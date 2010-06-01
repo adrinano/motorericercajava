@@ -26,6 +26,9 @@ class Singleton {
 		return instance;
 	}
 
+
+
+        //aggiungere controllo di esistenza e ultima modifica su file di indice
 	public void checkUpdate() {
 		if (this.lastUpdate == null || (!this.inExecution() && this.timeElapsed()))
 			this.startUpdate();
