@@ -24,8 +24,8 @@ public class AvviaRicerca {
 
     public LinkedList<DocumentoBean> avviaAzione(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
         
-        Singleton s = Singleton.getInstance();
-        s.checkUpdate();
+//        Singleton s = Singleton.getInstance();
+//        s.checkUpdate();
         System.out.println("Esco dalla servlet!");
 
 
