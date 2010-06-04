@@ -283,7 +283,7 @@ public class IndexFunction{
         File fileName = null;
         try {
             URL url = new URL(path);
-             fileName = new File(url.toString());
+            fileName = new File(url.toString());
             
         } catch (MalformedURLException ex) {
             Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, null, ex);

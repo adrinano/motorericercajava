@@ -6,9 +6,7 @@
 package controllo.Action;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
-import java.util.Timer;
 import javax.servlet.http.HttpServletRequest;
 import modello.DocumentoBean;
 import org.apache.lucene.index.CorruptIndexException;
@@ -20,16 +18,12 @@ import persistence.IndexFunction;
  *
  * @author palla
  */
-public class AvviaRicerca {
+public class SearchAction {
 
-    public LinkedList<DocumentoBean> avviaAzione(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
+    public LinkedList<DocumentoBean> startSearch(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
         
 //        Singleton s = Singleton.getInstance();
 //        s.checkUpdate();
-        System.out.println("Esco dalla servlet!");
-
-
-
 
         IndexFunction index = new IndexFunction();
 

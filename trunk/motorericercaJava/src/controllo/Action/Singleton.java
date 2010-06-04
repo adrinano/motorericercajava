@@ -7,7 +7,7 @@ package controllo.Action;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-class Singleton {
+public class Singleton {
 
 	private static double DELAY = 24*60*60*1000; // 24 ore
 

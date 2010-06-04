@@ -16,7 +16,6 @@ public class SitoBean {
     private String materia;
     private URL url;
     private String password;
-    private String user;
 
     /**
      * @return the materia
@@ -60,18 +59,5 @@ public class SitoBean {
         this.password = password;
     }
 
-    /**
-     * @return the user
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(String user) {
-        this.user = user;
-    }
 
 }
