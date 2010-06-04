@@ -5,7 +5,7 @@
 
 package servlets;
 
-import controllo.Action.AvviaRicerca;
+import controllo.Action.SearchAction;
 import controllo.Helper.FormHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,10 +31,13 @@ public class SearchForm extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
         long startTime = System.currentTimeMillis();
-        FormHelper form = new FormHelper(request);
-        AvviaRicerca ar = new AvviaRicerca();
+
+        FormHelper form = new FormHelper();
+        SearchAction ar = new SearchAction();
+
         LinkedList<DocumentoBean> lst;
         response.setContentType("text/html");
+
         PrintWriter out = response.getWriter();
         //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
@@ -44,9 +47,9 @@ public class SearchForm extends HttpServlet{
         out.println("</head>");
         out.println("<body>\n <div id=\"result\">");
         out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!</div> ");
-        if (form.controllo()){
+        if (form.controlloRicerca(request)){
             try {
-                lst = ar.avviaAzione(request);
+                lst = ar.startSearch(request);
                 long endTime = System.currentTimeMillis();
                 System.out.println("Avvia Azione");
                 if(lst.isEmpty()){
@@ -68,11 +71,12 @@ public class SearchForm extends HttpServlet{
                         out.println("<p class=\"meta\"><span class=\"date\"></p>");
                         out.println("<div class=\"entry\">");
 						out.println("<ul>");
-							out.println("<li><strong>Author</strong>:"+ doc.getAutore() + "</li>");
+                                                        out.println("<li><strong>Score</strong>: "+ doc.getScore() + "</li>");
+							out.println("<li><strong>Author</strong>: "+ doc.getAutore() + "</li>");
 							out.println("<li><strong>Ultimo autore</strong>: "+ doc.getUltimoAutore() + "</li>");
-							out.println("<li><strong>Keywords</strong>:" + doc.getKeywords() +"</li>");
-							out.println("<li><strong>Subject</strong>:" + doc.getOggetto() +"</li>");
-							out.println("<li><strong>Creator</strong>:" + doc.getApplicazione() + "</li>");
+							out.println("<li><strong>Keywords</strong>: " + doc.getKeywords() +"</li>");
+							out.println("<li><strong>Subject</strong>: " + doc.getOggetto() +"</li>");
+							out.println("<li><strong>Creator</strong>: " + doc.getApplicazione() + "</li>");
                                                         out.println("<li><strong>Contents</strong>: <p>" + doc.getContenuto().substring(0, 400) + " ...</p></li>");
 						out.println("</ul>");
 					out.println("<hr />");

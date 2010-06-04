@@ -13,19 +13,42 @@ import javax.servlet.http.HttpServletRequest;
  * @author palla
  */
 public class FormHelper {
-    private String form;
+    
 
-    public FormHelper(HttpServletRequest request)throws ServletException {
+    public FormHelper(){
 
-        this.form = request.getParameter("search");
+        
     }
 
-    public boolean controllo (){
-        boolean verifica = true;
+    /**
+     * Controllo form di ricerca
+     * @param request
+     * @return
+     */
+    public boolean controlloRicerca (HttpServletRequest request){
 
-        if (form.equals("")||form==null){
-            verifica = false;
+        if (request.getParameter("search").equals("")||request.getParameter("search")==null){
+            return false;
         }
-        return verifica;
+        return true;
+    }
+
+    /**
+     * Controllo dei campi per l'aggiunta dei siti da indicizzare
+     * controlla i campi user e password se il chech è segnato
+     * @param request
+     * @return
+     */
+    public boolean controlloSito(HttpServletRequest request){
+
+        if (request.getParameter("name").equals("")||request.getParameter("name")==null){
+            return false;
+        }
+
+        if (request.getParameter("url").equals("")||request.getParameter("url")==null){
+            return false;
+        }
+
+        return true;
     }
 }

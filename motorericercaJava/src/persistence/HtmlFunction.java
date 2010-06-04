@@ -22,12 +22,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import modello.DocumentoBean;
 import modello.SitoBean;
-import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hslf.extractor.PowerPointExtractor;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -93,12 +93,9 @@ public class HtmlFunction {
         DocumentoBean documentoPpt = new DocumentoBean();
 
         try {
-            WebClient wc = new WebClient(BrowserVersion.FIREFOX_3);
-            wc.getPage(url).getEnclosingWindow();
-
-
-            URLConnection connection = url.openConnection();
-            connection.connect();
+            
+            URLConnection connection = getConnection(sb, url);
+            
             PowerPointExtractor pptext = new PowerPointExtractor(connection.getInputStream());
             SummaryInformation info = pptext.getSummaryInformation();
             documentoPpt.setApplicazione(info.getApplicationName());
@@ -162,10 +159,12 @@ public class HtmlFunction {
     public DocumentoBean getPDFinfo(SitoBean sb, URL url){
         
         DocumentoBean documentoPdf = new DocumentoBean();
-
+        URLConnection connection = null;
         try {
-            URLConnection connection = url.openConnection();
-            connection.connect();
+            System.out.println("get PDF info");
+            //se l'utenza è a null nel file xml allora esegue una normale connessione
+            getConnection(sb, url);
+            
             PDDocument pdf = PDDocument.load(connection.getInputStream());
             //create a writer where to append the text content.
             StringWriter writer = new StringWriter();
@@ -225,6 +224,31 @@ public class HtmlFunction {
     private String eliminaFinale(String nodeName, String path){
         int dif = path.length() - nodeName.length();
         return path.substring(0, dif);
+    }
+
+    private URLConnection getConnection(SitoBean sb, URL url){
+        URLConnection connection = null;
+
+        if (sb.getPassword().equals("null")){
+            try {
+                System.out.println("Not encoding password!");
+                connection = url.openConnection();
+                connection.connect();
+            } catch (IOException ex) {
+                Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }else{
+            try {
+                System.out.println("Encoding password!");
+                BASE64Encoder base64 = new BASE64Encoder();
+                String encoding = base64.encode(sb.getPassword().getBytes());
+                connection = url.openConnection();
+                connection.setRequestProperty("Authorization", "Basic " + encoding);
+            } catch (IOException ex) {
+                Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        return connection;
     }
 
 

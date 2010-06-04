@@ -26,6 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import persistence.HtmlFunction;
 import persistence.IndexFunction;
+import persistence.XMLFunction;
 
 
 /**
@@ -34,6 +35,7 @@ import persistence.IndexFunction;
  */
 public class IndexThread implements Runnable{
 
+    final String siteXML = "webapps/sherlockTux/WEB-INF/config/siteUrl.xml";
     private boolean inExecution;
 
     public IndexThread(){
@@ -50,6 +52,20 @@ public class IndexThread implements Runnable{
         System.out.println("Run Thread start");
         inExecution = true;
         
+        eseguiIndex();
+
+        try{
+            Thread.sleep(10000);
+        }catch (InterruptedException ie){
+            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ie);
+        }
+
+        inExecution = false;
+        System.out.println("Run Thread finish");
+        
+    }
+
+    public void eseguiIndex(){
         HtmlFunction html = new HtmlFunction();
         IndexFunction index = null;
         try {
@@ -62,13 +78,14 @@ public class IndexThread implements Runnable{
             Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        List<SitoBean> siteList = getSitoBeanList();
+        XMLFunction xml = new XMLFunction();
+        List<SitoBean> siteList = xml.getSiteList();
         LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
         Iterator<SitoBean> iterator = siteList.iterator();
-
         while (iterator.hasNext()){
             try {
-
+                //System.out.println("sitelist name: " + iterator.next().getPassword());
+                stampalista(siteList);
                 indexing(iterator.next(), index, html, listaDocumenti);
             } catch (IOException ex) {
                 Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,16 +93,6 @@ public class IndexThread implements Runnable{
                 Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        try{
-            Thread.sleep(10000);
-        }catch (InterruptedException ie){
-            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ie);
-        }
-
-        inExecution = false;
-        System.out.println("Run Thread finish");
-        
     }
 
     public boolean getInExecution (){
@@ -108,56 +115,11 @@ public class IndexThread implements Runnable{
 
     }
 
-    private List<SitoBean> getSitoBeanList() {
-        List<SitoBean> lst = new LinkedList();
-        SitoBean sb = new SitoBean();
-
-        try {
-            File file = new File("config/siteUrl.xml");
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);
-            doc.getDocumentElement().normalize();
-            System.out.println("Root element " + doc.getDocumentElement().getNodeName());
-            NodeList nodeLst = doc.getElementsByTagName("corso");
-
-            for (int s = 0; s < nodeLst.getLength(); s++) {
-                Node fstNode = nodeLst.item(s);
-                if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element fstElmnt = (Element) fstNode;
-                    NodeList NameElmntLst = fstElmnt.getElementsByTagName("name");
-                    Element fstNmElmnt = (Element) NameElmntLst.item(0);
-                    NodeList fstNm = fstNmElmnt.getChildNodes();
-                    sb.setMateria(((Node) fstNm.item(0)).getNodeValue());
-                    System.out.println("Name : "  + ((Node) fstNm.item(0)).getNodeValue());
-
-                    NodeList urlElmntLst = fstElmnt.getElementsByTagName("url");
-                    Element lstUrlElmnt = (Element) urlElmntLst.item(0);
-                    NodeList lstUrl = lstUrlElmnt.getChildNodes();
-                    sb.setUrl(new URL(((Node) lstUrl.item(0)).getNodeValue()));
-                    System.out.println("Url : " + ((Node) lstUrl.item(0)).getNodeValue());
-
-                    NodeList pswElmntLst = fstElmnt.getElementsByTagName("psw");
-                    Element lstPswElmnt = (Element) pswElmntLst.item(0);
-                    NodeList lstPsw = lstPswElmnt.getChildNodes();
-                    sb.setPassword(((Node) lstPsw.item(0)).getNodeValue());
-                    System.out.println("Psw : " + ((Node) lstPsw.item(0)).getNodeValue());
-
-                    NodeList usrElmntLst = fstElmnt.getElementsByTagName("user");
-                    Element lstUsrElmnt = (Element) usrElmntLst.item(0);
-                    NodeList lstUsr = lstUsrElmnt.getChildNodes();
-                    sb.setUser(((Node) lstUsr.item(0)).getNodeValue());
-                    System.out.println("User : " + ((Node) lstUsr.item(0)).getNodeValue());
-
-                    lst.add(sb);
-                }
-
-            }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        
-
-        return lst;
+    private void stampalista(List<SitoBean> siteList) {
+        Iterator<SitoBean> iterator = siteList.iterator();
+        while(iterator.hasNext()){
+            System.out.println("sitelist: " + iterator.next().getMateria());
+        }
     }
+
 }

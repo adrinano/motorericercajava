@@ -6,26 +6,19 @@
 package local;
 
 import com.steadystate.css.parser.ParseException;
-import java.io.File;
+import controllo.Action.IndexThread;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import modello.DocumentoBean;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.store.LockObtainFailedException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import persistence.HtmlFunction;
-import persistence.IndexFunction;
+import controllo.Action.Singleton;
+import java.net.URL;
+import modello.SitoBean;
+import org.htmlparser.parserapplications.SiteCapturer;
+import org.xml.sax.SAXException;
+import persistence.XMLFunction;
+import servlets.AddSite;
 
 /**
  *
@@ -34,14 +27,21 @@ import persistence.IndexFunction;
 public class Shell {
 
 
-    public static void main(String[] args) throws IOException, CorruptIndexException, ParseException, URISyntaxException, InterruptedException{
+    public static void main(String[] args) throws MalformedURLException, ParserConfigurationException, SAXException, IOException {
 
-        //IndexThread it = new IndexThread();
+//        Singleton s = Singleton.getInstance();
+//        s.checkUpdate();
 
-//        Timer t = new Timer(true);
-//        t.scheduleAtFixedRate(it, new Date (System.currentTimeMillis()), 180000);
+        IndexThread it = new IndexThread();
+        it.eseguiIndex();
 
-        //it.run();
+//        SitoBean sito = new SitoBean();
+//        sito.setMateria("Tecniche Algoritmiche dei Grafi");
+//        sito.setUrl(new URL("http://web.dia.uniroma3.it/~frati/TecnicheAlgoritmiche.html"));
+//        sito.setPassword("null");
+//
+//        XMLFunction xml = new XMLFunction();
+//        xml.addSiteToXML(sito);
 
         
     }
