@@ -17,6 +17,7 @@ public class ComparatoreSitiBean implements Comparator<SitoBean>{
     public int compare(SitoBean o1, SitoBean o2) {
         String s1 = o1.getMateria();
         String s2 = o2.getMateria();
-        return s2.hashCode() - s1.hashCode();
+        //return s2.hashCode() - s1.hashCode();
+        return s1.compareTo(s2);
     }
 }
