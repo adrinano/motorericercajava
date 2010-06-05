@@ -54,20 +54,20 @@ public class SearchForm extends HttpServlet{
                 System.out.println("Avvia Azione");
                 if(lst.isEmpty()){
                     out.println("<div id=\"results_number\">" + lst.size() + " results in " + (endTime-startTime) +" milliseconds</div>");
-                    out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
+                    out.println("</div> \n <hr /> \n <hr /> \n<div id=\"posts\">");
                     
                    
                 }else{
                    //prossimaPagina = "/Results/results.jsp";
                     out.println("<div id=\"results_number\">" + lst.size() + " results in " + (endTime-startTime) +" milliseconds</div>");
-                    out.println("<hr /> \n <hr /> \n </div> \n<div id=\"posts\">");
+                    out.println("</div> \n <hr /> \n <hr /> \n<div id=\"posts\">");
 
                     //risultato della ricerca                   
                     Iterator<DocumentoBean> iterator = lst.iterator();
                     while(iterator.hasNext()){
                         DocumentoBean doc = iterator.next();
                         out.println("<div class=\"post\">");
-                        out.println("<h2 class=\"title\"><a href=\"" + doc.getPercorso() + "\">" + doc.getTitolo() + "</a></h2>");
+                        out.println("<h2 class=\"title\"><a href=\"" + doc.getPercorso() + "\" title=\" "+ doc.getTitolo() +" \">" + doc.getTitolo() + "</a></h2>");
                         out.println("<p class=\"meta\"><span class=\"date\"></p>");
                         out.println("<div class=\"entry\">");
 						out.println("<ul>");
@@ -77,7 +77,7 @@ public class SearchForm extends HttpServlet{
 							out.println("<li><strong>Keywords</strong>: " + doc.getKeywords() +"</li>");
 							out.println("<li><strong>Subject</strong>: " + doc.getOggetto() +"</li>");
 							out.println("<li><strong>Creator</strong>: " + doc.getApplicazione() + "</li>");
-                                                        out.println("<li><strong>Contents</strong>: <p>" + doc.getContenuto().substring(0, 400) + " ...</p></li>");
+                                                        out.println("<li><strong>Contents</strong>: <div class=\"boxcode\"><pre>" + doc.getContenuto().substring(0, 400) + " ...</pre></div></li>");
 						out.println("</ul>");
 					out.println("<hr />");
 					out.println("</div>");
