@@ -84,9 +84,9 @@ public class IndexThread implements Runnable{
         Iterator<SitoBean> iterator = siteList.iterator();
         while (iterator.hasNext()){
             try {
-                //System.out.println("sitelist name: " + iterator.next().getPassword());
-                stampalista(siteList);
-                indexing(iterator.next(), index, html, listaDocumenti);
+                SitoBean sb = iterator.next();
+                System.out.println("Materia che indicizza: " + sb.getMateria());
+                indexing(sb, index, html, listaDocumenti);
             } catch (IOException ex) {
                 Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
             } catch (URISyntaxException ex) {
@@ -103,7 +103,10 @@ public class IndexThread implements Runnable{
 
         List<URL> listaPDF = html.getURLList(sb.getUrl(), ".pdf");
         for (int i = 0; i < listaPDF.size(); i++) {
-            listaDocumenti.add(html.getPDFinfo(sb, listaPDF.get(i)));
+            DocumentoBean pdf = html.getPDFinfo(sb, listaPDF.get(i));
+            if(pdf!=null){
+                listaDocumenti.add(pdf);
+            }
         }
 
         List<URL> listaPPT = html.getURLList(sb.getUrl(), ".ppt");
@@ -113,13 +116,6 @@ public class IndexThread implements Runnable{
 
         index.indicizza(listaDocumenti);
 
-    }
-
-    private void stampalista(List<SitoBean> siteList) {
-        Iterator<SitoBean> iterator = siteList.iterator();
-        while(iterator.hasNext()){
-            System.out.println("sitelist: " + iterator.next().getMateria());
-        }
     }
 
 }

@@ -35,6 +35,7 @@ public class AddSiteAction {
         }else{
             sito.setPassword(request.getParameter("user") + ":" + request.getParameter("password"));
         }
+        sito.setId(String.valueOf(System.currentTimeMillis()));
 
         XMLFunction xml = new XMLFunction();
         return xml.addSiteToXML(sito);
