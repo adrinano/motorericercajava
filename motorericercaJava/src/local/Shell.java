@@ -34,16 +34,16 @@ public class Shell {
 
 
 
-        SitoBean sito = new SitoBean();
-        sito.setMateria("Sistemi Operativi");
-        sito.setUrl(new URL("http://www.dia.uniroma3.it/~pizzonia/so/"));
-        sito.setPassword("null");
-        sito.setId(String.valueOf(System.currentTimeMillis()));
-//        IndexThread it = new IndexThread();
-//        it.eseguiIndex();
-        XMLFunction xml = new XMLFunction();
-        //xml.addSiteToXML(sito);
-        xml.removeSite("1275997359810");
+//        SitoBean sito = new SitoBean();
+//        sito.setMateria("Sistemi Operativi");
+//        sito.setUrl(new URL("http://www.dia.uniroma3.it/~pizzonia/so/"));
+//        sito.setPassword("null");
+//        sito.setId(String.valueOf(System.currentTimeMillis()));
+        IndexThread it = new IndexThread();
+        it.eseguiIndex();
+//        XMLFunction xml = new XMLFunction();
+//        xml.addSiteToXML(sito);
+//        xml.removeSite("1275997359810");
 
         
     }
