@@ -143,7 +143,6 @@ public class HtmlFunction {
             //System.out.println("informazioni ppt Property: " +info.getProperties());
             //System.out.println(pptext.getText(true, true));
              */
-            System.out.println("------------");
         } catch (IOException ex) {
             Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, "Catch ppt!", ex);
         }
@@ -157,65 +156,70 @@ public class HtmlFunction {
      * @throws IOException
      */
     public DocumentoBean getPDFinfo(SitoBean sb, URL url){
-        
+
         DocumentoBean documentoPdf = new DocumentoBean();
-        URLConnection connection = null;
         try {
             System.out.println("get PDF info");
+            System.out.println("pdf Path: " + url.toString());
             //se l'utenza è a null nel file xml allora esegue una normale connessione
-            getConnection(sb, url);
+            URLConnection connection = getConnection(sb, url);
             
             PDDocument pdf = PDDocument.load(connection.getInputStream());
-            //create a writer where to append the text content.
-            StringWriter writer = new StringWriter();
-            PDFTextStripper stripper = new PDFTextStripper();
-            stripper.writeText(pdf, writer);
-            String contents = writer.getBuffer().toString();
-            //String summary = contents.substring( 0, contents.length() );
-            PDDocumentInformation info = pdf.getDocumentInformation();
-            documentoPdf.setAutore(info.getAuthor());
-            documentoPdf.setUltimoAutore(info.getAuthor()); //stessa Autore
-            documentoPdf.setNumeroRevisione(null);
-            documentoPdf.setContenuto(contents.toString());
-            documentoPdf.setApplicazione(info.getCreator());
-            if (info.getCreationDate() != null) {
-                documentoPdf.setDataCreazione(info.getCreationDate().getTime());
-            } else {
-                documentoPdf.setDataCreazione(null);
+            System.out.println("isEncrypted: " + pdf.isEncrypted());
+            if(!pdf.isEncrypted()){
+                //create a writer where to append the text content.
+                StringWriter writer = new StringWriter();
+                PDFTextStripper stripper = new PDFTextStripper();
+                stripper.writeText(pdf, writer);
+                String contents = writer.getBuffer().toString();
+                //String summary = contents.substring( 0, contents.length() );
+                PDDocumentInformation info = pdf.getDocumentInformation();
+                documentoPdf.setAutore(info.getAuthor());
+                documentoPdf.setUltimoAutore(info.getAuthor()); //stessa Autore
+                documentoPdf.setNumeroRevisione(null);
+                documentoPdf.setContenuto(contents.toString());
+                documentoPdf.setApplicazione(info.getCreator());
+                if (info.getCreationDate() != null) {
+                    documentoPdf.setDataCreazione(info.getCreationDate().getTime());
+                } else {
+                    documentoPdf.setDataCreazione(null);
+                }
+                //documentoPdf.setDataCreazione(info.getCreationDate().getTime());
+                if (info.getModificationDate() != null) {
+                    documentoPdf.setDataModifica(info.getModificationDate().getTime());
+                } else {
+                    documentoPdf.setDataModifica(null);
+                }
+                //documentoPdf.setDataModifica(info.getModificationDate().getTime());
+                //documentoPdf.setDataEdit(info.getModificationDate().getTime());     //stesso di Modifica
+                documentoPdf.setKeywords(info.getKeywords());
+                documentoPdf.setOggetto(info.getSubject());
+                documentoPdf.setPercorso(url.toString());
+                //documentoPdf.setProduttore(info.getProducer());
+                documentoPdf.setTipoFile("pdf");
+                documentoPdf.setTitolo(info.getTitle());
+                //documentoPdf.setTrapped(info.getTrapped()); //ma a che ce serve????
+                //System.out.println("letto il documento:" +info.getTitle());
+                /*
+                System.out.println("Title: " + info.getTitle());
+                System.out.println("Author: " + info.getAuthor());
+                System.out.println("Contents: " + contents.length());
+                System.out.println("Keywords: " + info.getKeywords());
+                System.out.println("Subject: " + info.getSubject());
+                System.out.println("Creator: " + info.getCreator());
+                System.out.println("Trapped: " + info.getTrapped());
+                System.out.println("Producer: " + info.getProducer());
+                //La data di creazione di un pdf coincide con la data di modifica del documento
+                System.out.println("Creation Date: " + info.getCreationDate().getTime());
+                System.out.println("------------");
+                 */
+                pdf.close();
+            }else{
+                pdf.close();
+                return null;
             }
-            //documentoPdf.setDataCreazione(info.getCreationDate().getTime());
-            if (info.getModificationDate() != null) {
-                documentoPdf.setDataModifica(info.getModificationDate().getTime());
-            } else {
-                documentoPdf.setDataModifica(null);
-            }
-            //documentoPdf.setDataModifica(info.getModificationDate().getTime());
-            //documentoPdf.setDataEdit(info.getModificationDate().getTime());     //stesso di Modifica
-            documentoPdf.setKeywords(info.getKeywords());
-            documentoPdf.setOggetto(info.getSubject());
-            documentoPdf.setPercorso(url.toString());
-            //documentoPdf.setProduttore(info.getProducer());
-            documentoPdf.setTipoFile("pdf");
-            documentoPdf.setTitolo(info.getTitle());
-            //documentoPdf.setTrapped(info.getTrapped()); //ma a che ce serve????
-            //System.out.println("letto il documento:" +info.getTitle());
-            /*
-            System.out.println("Title: " + info.getTitle());
-            System.out.println("Author: " + info.getAuthor());
-            System.out.println("Contents: " + contents.length());
-            System.out.println("Keywords: " + info.getKeywords());
-            System.out.println("Subject: " + info.getSubject());
-            System.out.println("Creator: " + info.getCreator());
-            System.out.println("Trapped: " + info.getTrapped());
-            System.out.println("Producer: " + info.getProducer());
-            System.out.println("pdf Path: " + url.toString());
-            //La data di creazione di un pdf coincide con la data di modifica del documento
-            System.out.println("Creation Date: " + info.getCreationDate().getTime());
-            System.out.println("------------");
-             */
-            pdf.close();
         } catch (IOException ex) {
-            Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, "Catch di pdf!", ex);
+            Logger.getLogger(HtmlFunction.class.getName()).log(Level.SEVERE, "Catch di pdf!" + url.toString(), ex);
         }
 
         return documentoPdf;
@@ -231,7 +235,6 @@ public class HtmlFunction {
 
         if (sb.getPassword().equals("null")){
             try {
-                System.out.println("Not encoding password!");
                 connection = url.openConnection();
                 connection.connect();
             } catch (IOException ex) {
@@ -239,7 +242,6 @@ public class HtmlFunction {
             }
             }else{
             try {
-                System.out.println("Encoding password!");
                 BASE64Encoder base64 = new BASE64Encoder();
                 String encoding = base64.encode(sb.getPassword().getBytes());
                 connection = url.openConnection();

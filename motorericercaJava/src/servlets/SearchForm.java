@@ -29,7 +29,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 public class SearchForm extends HttpServlet{
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
         long startTime = System.currentTimeMillis();
 
         FormHelper form = new FormHelper();
@@ -102,8 +102,8 @@ public class SearchForm extends HttpServlet{
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
-		doGet(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, CorruptIndexException, LockObtainFailedException, IOException {
+		doPost(request, response);
 
     }
 
