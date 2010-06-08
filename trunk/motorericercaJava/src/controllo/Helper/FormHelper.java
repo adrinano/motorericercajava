@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class FormHelper {
     
 
     public FormHelper(){
 
-        
     }
 
     /**
@@ -34,7 +34,6 @@ public class FormHelper {
 
     /**
      * Controllo dei campi per l'aggiunta dei siti da indicizzare
-     * controlla i campi user e password se il chech è segnato
      * @param request
      * @return
      */

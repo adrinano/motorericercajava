@@ -9,10 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class IndexAction {
 
+    /**
+     * 
+     * @param request
+     * @return
+     */
     public boolean startIndex(HttpServletRequest request){
 
         if(request.getParameter("index_action").equals("index_now")){

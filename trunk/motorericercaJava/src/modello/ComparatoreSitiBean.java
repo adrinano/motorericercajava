@@ -9,7 +9,8 @@ import java.util.Comparator;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class ComparatoreSitiBean implements Comparator<SitoBean>{
 

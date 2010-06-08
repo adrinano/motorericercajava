@@ -10,7 +10,8 @@ import persistence.XMLFunction;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class RemoveSiteAction {
 

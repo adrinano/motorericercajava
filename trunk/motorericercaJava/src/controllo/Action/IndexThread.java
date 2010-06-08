@@ -5,7 +5,6 @@
 
 package controllo.Action;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,16 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import modello.DocumentoBean;
 import modello.SitoBean;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import persistence.HtmlFunction;
 import persistence.IndexFunction;
 import persistence.XMLFunction;
@@ -31,7 +24,8 @@ import persistence.XMLFunction;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class IndexThread implements Runnable{
 
@@ -65,6 +59,9 @@ public class IndexThread implements Runnable{
         
     }
 
+    /**
+     * esegue l'indicizzazione
+     */
     public void eseguiIndex(){
         HtmlFunction html = new HtmlFunction();
         IndexFunction index = null;
@@ -95,10 +92,23 @@ public class IndexThread implements Runnable{
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getInExecution (){
         return this.inExecution;
     }
 
+    /**
+     *
+     * @param sb
+     * @param index
+     * @param html
+     * @param listaDocumenti
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     private static void indexing(SitoBean sb, IndexFunction index, HtmlFunction html, LinkedList<DocumentoBean> listaDocumenti) throws IOException, URISyntaxException {
 
         List<URL> listaPDF = html.getURLList(sb.getUrl(), ".pdf");

@@ -21,7 +21,8 @@ import org.apache.lucene.util.Version;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class MyAnalyzer extends Analyzer{
 
@@ -36,6 +37,10 @@ public class MyAnalyzer extends Analyzer{
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     private static Set<String> getStopWords(){
         Set<String> stringSet = new HashSet<String>();
 

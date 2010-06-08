@@ -16,15 +16,22 @@ import persistence.IndexFunction;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class SearchAction {
 
+    /**
+     * 
+     * @param request
+     * @return
+     * @throws CorruptIndexException
+     * @throws LockObtainFailedException
+     * @throws IOException
+     * @throws ParseException
+     */
     public LinkedList<DocumentoBean> startSearch(HttpServletRequest request) throws CorruptIndexException, LockObtainFailedException, IOException, ParseException {
         
-//        Singleton s = Singleton.getInstance();
-//        s.checkUpdate();
-
         IndexFunction index = new IndexFunction();
 
         //ritorna false se la lista è piena

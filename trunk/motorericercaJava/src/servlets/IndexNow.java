@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class IndexNow extends HttpServlet{
      private String prossimaPagina = "/ControlPanel/errore.jsp";

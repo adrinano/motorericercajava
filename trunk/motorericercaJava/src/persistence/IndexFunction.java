@@ -39,7 +39,8 @@ import org.apache.lucene.util.Version;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class IndexFunction{
 
@@ -47,6 +48,12 @@ public class IndexFunction{
     private FSDirectory indexDir;
     private LinkedList<DocumentoBean> lst;
 
+    /**
+     * 
+     * @throws CorruptIndexException
+     * @throws LockObtainFailedException
+     * @throws IOException
+     */
     public IndexFunction() throws CorruptIndexException, LockObtainFailedException, IOException {
         //imposto la versione di Lucene
         this.luceneAnalyzer = new MyAnalyzer();
@@ -84,9 +91,14 @@ public class IndexFunction{
         System.out.println("Time to index: " + (System.currentTimeMillis() - start));
     }
 
-
     /**
      * Aggiunge il documento da indicizzare
+     * 
+     * @param documento
+     * @param indexWriter
+     * @throws CorruptIndexException
+     * @throws LockObtainFailedException
+     * @throws IOException
      */
     private void addDoc(DocumentoBean documento, IndexWriter indexWriter) throws CorruptIndexException, LockObtainFailedException, IOException{
 

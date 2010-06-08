@@ -9,7 +9,8 @@ import java.net.URL;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class SitoBean {
 
