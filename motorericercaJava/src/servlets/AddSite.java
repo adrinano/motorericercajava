@@ -22,7 +22,8 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class AddSite extends HttpServlet{
     private String prossimaPagina = "/ControlPanel/errore.jsp";

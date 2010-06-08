@@ -24,7 +24,8 @@ import org.apache.lucene.store.LockObtainFailedException;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class SearchForm extends HttpServlet{
 

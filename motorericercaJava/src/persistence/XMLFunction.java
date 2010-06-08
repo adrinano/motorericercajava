@@ -39,7 +39,8 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class XMLFunction {
     private File file;
@@ -60,10 +61,7 @@ public class XMLFunction {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-
             Document doc = db.parse(file);
-
-
             Node corsi = doc.getFirstChild();
 
             Node corso = doc.createElement("corso");
@@ -171,6 +169,11 @@ public class XMLFunction {
         return lst;
     }
 
+    /**
+     * 
+     * @param remElementId
+     * @return
+     */
     public boolean removeSite(String remElementId){
         boolean verifica = false;
         try {
@@ -203,8 +206,6 @@ public class XMLFunction {
                     }
                 }
             }
-            
-            
             //Normalize the DOM tree to combine all adjacent nodes
             doc.normalize();
             Source source = new DOMSource(doc);

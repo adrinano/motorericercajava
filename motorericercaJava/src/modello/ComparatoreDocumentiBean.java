@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class ComparatoreDocumentiBean implements Comparator<DocumentoBean>{
 
@@ -25,6 +26,11 @@ public class ComparatoreDocumentiBean implements Comparator<DocumentoBean>{
         return s2.hashCode() - s1.hashCode();
     }
 
+    /**
+     * 
+     * @param path
+     * @return
+     */
     private String eliminaFinale(String path){
         int dif = 0;
         try {

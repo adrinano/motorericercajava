@@ -10,7 +10,8 @@ import java.util.Date;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class DocumentoBean {
 

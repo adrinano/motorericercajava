@@ -31,7 +31,8 @@ import sun.misc.BASE64Encoder;
 
 /**
  *
- * @author palla
+ * @author Daniele Palladino
+ * @author Adriano Bellia
  */
 public class HtmlFunction {
 
@@ -225,11 +226,23 @@ public class HtmlFunction {
         return documentoPdf;
     }
 
+    /**
+     * 
+     * @param nodeName
+     * @param path
+     * @return
+     */
     private String eliminaFinale(String nodeName, String path){
         int dif = path.length() - nodeName.length();
         return path.substring(0, dif);
     }
 
+    /**
+     * 
+     * @param sb
+     * @param url
+     * @return
+     */
     private URLConnection getConnection(SitoBean sb, URL url){
         URLConnection connection = null;
 
