@@ -5,13 +5,10 @@
 
 package controllo.Action;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Document;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import modello.SitoBean;
 import org.xml.sax.SAXException;
@@ -23,6 +20,15 @@ import persistence.XMLFunction;
  */
 public class AddSiteAction {
 
+    /**
+     * 
+     * @param request
+     * @return
+     * @throws ParserConfigurationException
+     * @throws MalformedURLException
+     * @throws SAXException
+     * @throws IOException
+     */
     public boolean startAddSite(HttpServletRequest request) throws ParserConfigurationException, MalformedURLException, SAXException, IOException{
 
         SitoBean sito = new SitoBean();

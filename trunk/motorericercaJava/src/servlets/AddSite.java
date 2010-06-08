@@ -39,7 +39,7 @@ public class AddSite extends HttpServlet{
                 if (asa.startAddSite(request)){
                     prossimaPagina = "/ControlPanel/index.jsp";
                 }else{
-                    prossimaPagina = "/ControlPanel/errore.jsp?err=errore nella AddSite&redir=ControlPanel/index.jsp";
+                    prossimaPagina = "/ControlPanel/errore.jsp?err=errore nella AddSite";
                 }
 
             } catch (ParserConfigurationException ex) {

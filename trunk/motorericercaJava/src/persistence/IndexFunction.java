@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modello.ComparatoreDocumentiBean;
@@ -26,12 +25,10 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Scorer;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.search.TopScoreDocCollector;
@@ -64,11 +61,15 @@ public class IndexFunction{
 
 
     /**
-     * indicizzazione del contenuto delle tabelle prese dal sito
+     *
+     * @param listDocumenti
+     * @throws CorruptIndexException
+     * @throws LockObtainFailedException
+     * @throws IOException
      */
     public void indicizza(List<DocumentoBean> listDocumenti) throws CorruptIndexException, LockObtainFailedException, IOException{
-
-        //crea l'indexWriter. il true determina che l'index viene riscritto quando si chiede di indicizzare
+        long start = System.currentTimeMillis();
+        //crea l'indexWriter il true determina che l'index viene riscritto quando si chiede di indicizzare
         IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, true, IndexWriter.MaxFieldLength.LIMITED);
         indexWriter.setUseCompoundFile(false);
         Iterator<DocumentoBean> iterator = listDocumenti.iterator();
@@ -79,6 +80,8 @@ public class IndexFunction{
         }
         indexWriter.optimize();
         indexWriter.close();
+
+        System.out.println("Time to index: " + (System.currentTimeMillis() - start));
     }
 
 
