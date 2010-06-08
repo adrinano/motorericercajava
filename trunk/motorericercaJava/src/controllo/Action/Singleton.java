@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 
 public class Singleton {
 
-	private static double DELAY = 24*60*60*1000; // 24 ore
+	private double DELAY; // 24 ore
 
 	private static Singleton instance;
 
@@ -17,7 +17,7 @@ public class Singleton {
 	private IndexThread indexThread;
 
 	private Singleton() {
-		this.indexThread = new IndexThread();
+            this.indexThread = new IndexThread();
 	}
 
 	public static Singleton getInstance() {
@@ -25,8 +25,13 @@ public class Singleton {
 			instance = new Singleton();
 		return instance;
 	}
+        public void setDelay(double delay){
+            this.DELAY = delay*60*60*1000;
+        }
 
-
+        public double getDelay(){
+            return this.DELAY;
+        }
 
         //aggiungere controllo di esistenza e ultima modifica su file di indice
 	public void checkUpdate() {
@@ -43,7 +48,7 @@ public class Singleton {
 
 	private boolean timeElapsed() {
 		double d = new GregorianCalendar().getTimeInMillis() - this.lastUpdate.getTimeInMillis();
-		return d > Singleton.DELAY;
+		return d > Singleton.getInstance().getDelay();
 	}
 
 	private boolean inExecution() {
