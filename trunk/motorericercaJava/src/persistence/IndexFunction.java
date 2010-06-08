@@ -91,8 +91,7 @@ public class IndexFunction{
 	try {
             if(documento != null){
                 Document document = new Document();
-                System.out.println("The document " + documento.getTitolo() + " is being indexed");
-
+                
                 document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                 if (documento.getTitolo()!=null){
@@ -144,7 +143,6 @@ public class IndexFunction{
                 }
 
                 if(documento.getDataCreazione()!=null){
-                    System.out.println(documento.getDataCreazione().getTime());
                     document.add(new Field("creationDate", Long.toString(documento.getDataCreazione().getTime()) , Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }else{
                     document.add(new Field("creationDate", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -163,8 +161,6 @@ public class IndexFunction{
                 }
 
                 indexWriter.addDocument(document);
-                System.out.println("Path document added: " + documento.getPercorso());
-                System.out.println("------------");
             }
 
 	}catch (Exception e) {

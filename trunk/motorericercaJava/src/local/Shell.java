@@ -32,16 +32,17 @@ public class Shell {
 //        Singleton s = Singleton.getInstance();
 //        s.checkUpdate();
 
-        IndexThread it = new IndexThread();
-        it.eseguiIndex();
+
 
 //        SitoBean sito = new SitoBean();
-//        sito.setMateria("Tecniche Algoritmiche dei Grafi");
-//        sito.setUrl(new URL("http://web.dia.uniroma3.it/~frati/TecnicheAlgoritmiche.html"));
-//        sito.setPassword("null");
-//
+//        sito.setMateria("Reti di Calcolatori");
+//        sito.setUrl(new URL("http://www.dia.uniroma3.it/~impianti/HomePage09-10/index_reti1.html"));
+//        sito.setPassword("computer:networks");
+//        sito.setId(String.valueOf(System.currentTimeMillis()));
+        IndexThread it = new IndexThread();
+        it.eseguiIndex();
 //        XMLFunction xml = new XMLFunction();
-//        xml.addSiteToXML(sito);
+//        xml.getSiteList();
 
         
     }

@@ -5,7 +5,6 @@
 
 package controllo.Helper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -48,6 +47,18 @@ public class FormHelper {
         if (request.getParameter("url").equals("")||request.getParameter("url")==null){
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * 
+     * @param request
+     * @return
+     */
+    public boolean controlloIndexNow(HttpServletRequest request){
+        if (request.getParameter("index_action").equals("")||request.getParameter("index_action")==null)
+            return false;
 
         return true;
     }

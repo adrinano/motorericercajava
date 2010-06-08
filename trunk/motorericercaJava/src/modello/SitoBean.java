@@ -16,6 +16,7 @@ public class SitoBean {
     private String materia;
     private URL url;
     private String password;
+    private String id;
 
     /**
      * @return the materia
@@ -57,6 +58,20 @@ public class SitoBean {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
 

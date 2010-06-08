@@ -27,8 +27,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import modello.ComparatoreSitiBean;
 import modello.SitoBean;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -60,6 +62,10 @@ public class XMLFunction {
             Node corsi = doc.getFirstChild();
 
             Node corso = doc.createElement("corso");
+            NamedNodeMap corsoAttr = corso.getAttributes();
+            Attr id = doc.createAttribute("id");
+            id.setValue(sito.getId());
+            corsoAttr.setNamedItem(id);
 
             Node name = doc.createElement("name");
             name.setTextContent(sito.getMateria());
@@ -116,7 +122,6 @@ public class XMLFunction {
 
     public List<SitoBean> getSiteList(){
         List<SitoBean> lst = new LinkedList();
-
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -134,24 +139,21 @@ public class XMLFunction {
                     Element fstNmElmnt = (Element) NameElmntLst.item(0);
                     NodeList fstNm = fstNmElmnt.getChildNodes();
                     sb.setMateria(((Node) fstNm.item(0)).getNodeValue());
-                    System.out.println("Name : "  + ((Node) fstNm.item(0)).getNodeValue());
 
                     NodeList urlElmntLst = fstElmnt.getElementsByTagName("url");
                     Element lstUrlElmnt = (Element) urlElmntLst.item(0);
                     NodeList lstUrl = lstUrlElmnt.getChildNodes();
                     sb.setUrl(new URL(((Node) lstUrl.item(0)).getNodeValue()));
-                    System.out.println("Url : " + ((Node) lstUrl.item(0)).getNodeValue());
 
                     NodeList pswElmntLst = fstElmnt.getElementsByTagName("uspsw");
                     Element lstPswElmnt = (Element) pswElmntLst.item(0);
                     NodeList lstPsw = lstPswElmnt.getChildNodes();
                     sb.setPassword(((Node) lstPsw.item(0)).getNodeValue());
-                    System.out.println("Psw : " + ((Node) lstPsw.item(0)).getNodeValue());
+                    
+                    sb.setId(fstElmnt.getAttribute("id"));
 
                     lst.add(sb);
                 }
-
-                System.out.println("lista siti 0: " + lst.size());
             }
             } catch (Exception e) {
                 e.printStackTrace();
