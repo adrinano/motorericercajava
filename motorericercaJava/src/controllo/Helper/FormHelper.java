@@ -62,4 +62,18 @@ public class FormHelper {
 
         return true;
     }
+
+    /**
+     * 
+     * @param request
+     * @return
+     */
+    public boolean controlloRemove(HttpServletRequest request){
+
+        if (request.getParameter("remove").equals("0"))
+            return false;
+
+        return true;
+
+    }
 }

@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -46,8 +48,11 @@ public class XMLFunction {
         this.file = new File("webapps/sherlockTux/WEB-INF/config/siteUrl.xml");
     }
 
-
-
+    /**
+     *
+     * @param sito
+     * @return
+     */
     public boolean addSiteToXML(SitoBean sito){
 
         boolean verifica = false;
@@ -120,6 +125,10 @@ public class XMLFunction {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public List<SitoBean> getSiteList(){
         List<SitoBean> lst = new LinkedList();
         try {
@@ -127,7 +136,7 @@ public class XMLFunction {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-            System.out.println("Root element " + doc.getDocumentElement().getNodeName());
+            //System.out.println("Root element " + doc.getDocumentElement().getNodeName());
             NodeList nodeLst = doc.getElementsByTagName("corso");
 
             for (int s = 0; s < nodeLst.getLength(); s++) {
@@ -160,5 +169,57 @@ public class XMLFunction {
             }
         Collections.sort(lst, new ComparatoreSitiBean());
         return lst;
+    }
+
+    public boolean removeSite(String remElementId){
+        boolean verifica = false;
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(file);
+            doc.getDocumentElement().normalize();
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            Transformer tFormer = tFactory.newTransformer();
+            NodeList nodeLst = doc.getElementsByTagName("corso");
+            for (int s = 0; s < nodeLst.getLength(); s++) {
+                Node node = nodeLst.item(s);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    //Remove element
+                    
+                    if (element.getAttribute("id").equals(remElementId)){
+                        System.out.println("first local name: " + element.getAttribute("id"));
+                        //element.removeChild(element);
+                        System.out.println("Rimuovo: " + element.getChildNodes().item(0).getTextContent());
+                        element.removeChild(element.getChildNodes().item(0));
+
+                        System.out.println("Rimuovo: " + element.getChildNodes().item(0).getTextContent());
+                        element.removeChild(element.getChildNodes().item(0));
+
+                        System.out.println("Rimuovo: " + element.getChildNodes().item(0).getTextContent());
+                        element.removeChild(element.getChildNodes().item(0));
+                        
+                        element.getParentNode().removeChild(element);
+                    }
+                }
+            }
+            
+            
+            //Normalize the DOM tree to combine all adjacent nodes
+            doc.normalize();
+            Source source = new DOMSource(doc);
+            Result dest = new StreamResult(file);
+            tFormer.transform(source, dest);
+            verifica = true;
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLFunction.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(XMLFunction.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(XMLFunction.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLFunction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return verifica;
     }
 }
