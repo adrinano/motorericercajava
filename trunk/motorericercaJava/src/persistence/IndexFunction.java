@@ -18,14 +18,18 @@ import java.util.logging.Logger;
 import modello.ComparatoreDocumentiBean;
 import modello.DocumentoBean;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.tokenattributes.FlagsAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Scorer;
@@ -130,7 +134,7 @@ public class IndexFunction{
                 if(documento.getAutore()!=null){
                     document.add(new Field("author", documento.getAutore(), Field.Store.YES, Field.Index.ANALYZED));
                 }else{
-                    document.add(new Field("autho", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    document.add(new Field("author", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
                 
                 if(documento.getKeywords()!=null){
@@ -198,9 +202,18 @@ public class IndexFunction{
         int hitsPerPage = 500;
         IndexSearcher searcher = new IndexSearcher(indexDir, true);
 
-        QueryParser queryParser = new QueryParser(Version.LUCENE_30, "content", luceneAnalyzer);
-        queryParser.setDefaultOperator(QueryParser.Operator.AND);
-        Query query = queryParser.parse(querystr);
+        //QueryParser queryParser = new QueryParser(Version.LUCENE_30, "content", luceneAnalyzer);
+        //queryParser.setDefaultOperator(QueryParser.Operator.AND);
+        //Query query = queryParser.parse(querystr);
+        
+        String[] fields = {"content","object", "author", "object", "key", "title", "lastAuthor"};
+        BooleanClause.Occur[] flags = {BooleanClause.Occur.MUST, BooleanClause.Occur.SHOULD,
+                            BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD,
+                            BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD,
+                            BooleanClause.Occur.SHOULD};
+        
+        Query query = MultiFieldQueryParser.parse(Version.LUCENE_30, querystr, fields, flags, luceneAnalyzer);
+        
         
         
         Weight weight = query.createWeight(searcher);   //viene associato un peso alla query
