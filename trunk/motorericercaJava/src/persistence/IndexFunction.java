@@ -215,11 +215,11 @@ public class IndexFunction{
         Query query = MultiFieldQueryParser.parse(Version.LUCENE_30, querystr, fields, flags, luceneAnalyzer);
         
         
-        
+ /*
         Weight weight = query.createWeight(searcher);   //viene associato un peso alla query
         //TopDocs topDocs = searcher.search(query,hitsPerPage);     //senza il peso della query
         TopDocs topDocs = searcher.search(weight, null, hitsPerPage);   //con il peso della query
- /*       
+
         PriorityQueue pq = new PriorityQueue();
         TopDocsCollector topDocsCollector1 = new TopScoreDocCollector(pq) {
 
@@ -233,7 +233,7 @@ public class IndexFunction{
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };
-*/        
+ //
         TopDocsCollector topDocsCollector = TopScoreDocCollector.create(hitsPerPage, true);
         IndexReader indexReader = searcher.getIndexReader();
         Scorer scorer = weight.scorer(indexReader, true, true);
@@ -241,6 +241,12 @@ public class IndexFunction{
         searcher.search(weight, null, topDocsCollector);
         topDocs =topDocsCollector.topDocs();
         ScoreDoc[] hits = topDocs.scoreDocs;
+*/
+
+        //VECCHIA PROCEDURA
+        TopDocs topDocs = searcher.search(query,hitsPerPage);     //senza il peso della query
+        ScoreDoc[] hits = topDocs.scoreDocs;
+        //FINE VECCHIA PROCEDURA
 
         // 4. display results
         lst.clear();
