@@ -10,6 +10,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.util.UrlUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -63,7 +64,7 @@ public class HtmlFunction {
                     pathIniziale = eliminaFinale( fileName.getName(), url.toString());
                 }
 
-                lst.add(new URL( pathIniziale + anchors.get(i).getHrefAttribute()));
+                lst.add(new URL( UrlUtils.encodeAnchor(pathIniziale + anchors.get(i).getHrefAttribute())));
                 //System.out.println("Si: " + pathIniziale + anchors.get(i).getHrefAttribute());
             }
 

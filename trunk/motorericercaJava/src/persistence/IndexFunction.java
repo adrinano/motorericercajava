@@ -183,7 +183,7 @@ public class IndexFunction{
             }
 
 	}catch (Exception e) {
-            System.out.println("Could not add: " + documento.getPercorso());
+            System.out.println("Could not add: " + documento.getTitolo());
             Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Catch index!", e);
             System.out.println("------------");
 	}
