@@ -34,6 +34,7 @@ public class DocumentoBean {
     private String contenuto;
     private String percorso;
     private float score;
+    private String materia;
 
     public float getScore() {
         return score;
@@ -172,7 +173,11 @@ public class DocumentoBean {
         this.ultimoAutore = ultimoAutore;
     }
 
+    public String getMateria() {
+        return materia;
+    }
 
-
-
+    public void setMateria(String materia) {
+        this.materia = materia;
+    }
 }

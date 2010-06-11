@@ -47,7 +47,7 @@ public class SearchForm extends HttpServlet{
         out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
         out.println("</head>");
         out.println("<body>\n <div id=\"result\">");
-        out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">This is what you ask me!</div> ");
+        out.println("<div id=\"formsearchonresults\"> <div id=\"miniform\">You asked me: <span id=\"text_result\"> " + request.getParameter("search") +"</span></div> ");
         if (form.controlloRicerca(request)){
             try {
                 lst = ar.startSearch(request);
@@ -73,6 +73,7 @@ public class SearchForm extends HttpServlet{
                         out.println("<div class=\"entry\">");
 						out.println("<ul>");
                                                         out.println("<li><strong>Score</strong>: "+ doc.getScore() + "</li>");
+                                                        out.println("<li><strong>Corso</strong>: "+ doc.getMateria() + "</li>");
 							out.println("<li><strong>Author</strong>: "+ doc.getAutore() + "</li>");
 							out.println("<li><strong>Ultimo autore</strong>: "+ doc.getUltimoAutore() + "</li>");
 							out.println("<li><strong>Keywords</strong>: " + doc.getKeywords() +"</li>");
