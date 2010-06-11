@@ -112,6 +112,7 @@ public class IndexFunction{
                 Document document = new Document();
                 
                 document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                document.add(new Field("materia", documento.getMateria(), Field.Store.YES, Field.Index.ANALYZED));
 
                 if (documento.getTitolo()!=null){
                     document.add(new Field("title", documento.getTitolo(), Field.Store.YES, Field.Index.ANALYZED));
@@ -206,11 +207,11 @@ public class IndexFunction{
         //queryParser.setDefaultOperator(QueryParser.Operator.AND);
         //Query query = queryParser.parse(querystr);
         
-        String[] fields = {"content","object", "author", "object", "key", "title", "lastAuthor"};
+        String[] fields = {"content","object", "author", "object", "key", "title", "lastAuthor", "materia"};
         BooleanClause.Occur[] flags = {BooleanClause.Occur.MUST, BooleanClause.Occur.SHOULD,
                             BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD,
                             BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD,
-                            BooleanClause.Occur.SHOULD};
+                            BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD};
         
         Query query = MultiFieldQueryParser.parse(Version.LUCENE_30, querystr, fields, flags, luceneAnalyzer);
         
@@ -267,6 +268,7 @@ public class IndexFunction{
             db.setNumeroRevisione(d.get("revision"));
             db.setUltimoAutore(d.get("lastAuthor"));
             db.setOggetto(d.get("object"));
+            db.setMateria(d.get("materia"));
             db.setScore(hits[i].score);
 
             //La data di creazione e la data di modifica sono oggetti di tipo Date

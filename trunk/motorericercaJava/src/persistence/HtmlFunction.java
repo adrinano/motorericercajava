@@ -125,6 +125,7 @@ public class HtmlFunction {
             documentoPpt.setUltimoAutore(info.getLastAuthor());
             documentoPpt.setContenuto(pptext.getText(true, true, true, true));
             documentoPpt.setPercorso(url.toString());
+            documentoPpt.setMateria(sb.getMateria());
             /*
             System.out.println(info.getLastSaveDateTime().toString());
             System.out.println("informazioni ppt AppName: " +info.getApplicationName());
@@ -200,6 +201,7 @@ public class HtmlFunction {
                 //documentoPdf.setProduttore(info.getProducer());
                 documentoPdf.setTipoFile("pdf");
                 documentoPdf.setTitolo(info.getTitle());
+                documentoPdf.setMateria(sb.getMateria());
                 //documentoPdf.setTrapped(info.getTrapped()); //ma a che ce serve????
                 //System.out.println("letto il documento:" +info.getTitle());
                 /*
