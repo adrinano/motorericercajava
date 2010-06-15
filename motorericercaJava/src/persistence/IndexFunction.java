@@ -18,25 +18,18 @@ import java.util.logging.Logger;
 import modello.ComparatoreDocumentiBean;
 import modello.DocumentoBean;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.tokenattributes.FlagsAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopDocsCollector;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.search.Weight;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
@@ -64,10 +57,10 @@ public class IndexFunction{
         
         //indexDir indica che Lucene crea l'index su FileSystem
         this.indexDir = FSDirectory.open(new File("webapps/sherlockTux/WEB-INF/config/index.writer"));
-        
-        
+
         //lista dei socumenti
         this.lst = new LinkedList<DocumentoBean>();
+
     }
 
 
@@ -80,14 +73,20 @@ public class IndexFunction{
      */
     public void indicizza(List<DocumentoBean> listDocumenti) throws CorruptIndexException, LockObtainFailedException, IOException{
         long start = System.currentTimeMillis();
-        //crea l'indexWriter il true determina che l'index viene riscritto quando si chiede di indicizzare
+
+        //crea l'indexWriter il true determina che l'index venga riscritto
+        //quando si chiede di indicizzare di modo da eliminare i doppioni
         IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+        
         indexWriter.setUseCompoundFile(false);
         Iterator<DocumentoBean> iterator = listDocumenti.iterator();
         
         while(iterator.hasNext()){
-            addDoc(iterator.next(), indexWriter);
-            //System.out.println("Titolo ppt " + iterator.next().getTitolo());
+            try{
+                indexWriter.addDocument(addDoc(iterator.next()));
+            }catch (Exception e){
+                Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Catch index!", e);
+            }
         }
         indexWriter.optimize();
         indexWriter.close();
@@ -96,20 +95,38 @@ public class IndexFunction{
     }
 
     /**
-     * Aggiunge il documento da indicizzare
-     * 
-     * @param documento
-     * @param indexWriter
+     * Update dell'indice
+     * @param listDocumenti
      * @throws CorruptIndexException
      * @throws LockObtainFailedException
      * @throws IOException
      */
-    private void addDoc(DocumentoBean documento, IndexWriter indexWriter) throws CorruptIndexException, LockObtainFailedException, IOException{
+    public void update(List<DocumentoBean> listDocumenti) throws CorruptIndexException, LockObtainFailedException, IOException{
+        IndexWriter indexWriter = new IndexWriter(indexDir, luceneAnalyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+        indexWriter.setUseCompoundFile(false);
+        Iterator<DocumentoBean> iterator = listDocumenti.iterator();
 
+        while(iterator.hasNext()){
+            indexWriter.updateDocument(new Term("content"), addDoc(iterator.next()), luceneAnalyzer);
+        }
+        indexWriter.optimize();
+        indexWriter.close();
+    }
+
+    /**
+     * Restituisce il documento Document da indicizzare
+     * 
+     * @param documento
+     * @return
+     * @throws CorruptIndexException
+     * @throws LockObtainFailedException
+     * @throws IOException
+     */
+    private Document addDoc(DocumentoBean documento) throws CorruptIndexException, LockObtainFailedException, IOException{
+        Document document = new Document();
         //Add documents to the index
 	try {
             if(documento != null){
-                Document document = new Document();
                 
                 document.add(new Field("path", documento.getPercorso(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 document.add(new Field("materia", documento.getMateria(), Field.Store.YES, Field.Index.ANALYZED));
@@ -180,14 +197,15 @@ public class IndexFunction{
                     document.add(new Field("typeFile", "Campo Nullo!", Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
 
-                indexWriter.addDocument(document);
+                //indexWriter.addDocument(document);
             }
 
 	}catch (Exception e) {
             System.out.println("Could not add: " + documento.getTitolo());
-            Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Catch index!", e);
+            Logger.getLogger(IndexFunction.class.getName()).log(Level.SEVERE, "Errore nel creare il document...", e);
             System.out.println("------------");
 	}
+        return document;
     }
 
     /**
@@ -214,37 +232,6 @@ public class IndexFunction{
                             BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD};
         
         Query query = MultiFieldQueryParser.parse(Version.LUCENE_30, querystr, fields, flags, luceneAnalyzer);
-        
-        
- /*
-        Weight weight = query.createWeight(searcher);   //viene associato un peso alla query
-        //TopDocs topDocs = searcher.search(query,hitsPerPage);     //senza il peso della query
-        TopDocs topDocs = searcher.search(weight, null, hitsPerPage);   //con il peso della query
-
-        PriorityQueue pq = new PriorityQueue();
-        TopDocsCollector topDocsCollector1 = new TopScoreDocCollector(pq) {
-
-            @Override
-            public void collect(int i) throws IOException {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public boolean acceptsDocsOutOfOrder() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
- //
-        TopDocsCollector topDocsCollector = TopScoreDocCollector.create(hitsPerPage, true);
-        IndexReader indexReader = searcher.getIndexReader();
-        Scorer scorer = weight.scorer(indexReader, true, true);
-        topDocsCollector.setScorer(scorer);
-        searcher.search(weight, null, topDocsCollector);
-        topDocs =topDocsCollector.topDocs();
-        ScoreDoc[] hits = topDocs.scoreDocs;
-*/
-
-        //VECCHIA PROCEDURA
         TopDocs topDocs = searcher.search(query,hitsPerPage);     //senza il peso della query
         ScoreDoc[] hits = topDocs.scoreDocs;
         //FINE VECCHIA PROCEDURA
@@ -256,7 +243,6 @@ public class IndexFunction{
             DocumentoBean db = new DocumentoBean();
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
-            //System.out.println((i + 1) + ". " + d.get("path"));
 
             db.setPercorso(d.get("path"));
             db.setContenuto(d.get("content"));
@@ -292,7 +278,6 @@ public class IndexFunction{
         // searcher can only be closed when there
         // is no need to access the documents any more.
         searcher.close();
-        System.out.println("search: " + lst.size());
         return lst.isEmpty();
     }
 
@@ -302,7 +287,6 @@ public class IndexFunction{
      */
     public LinkedList<DocumentoBean> getDocumentList(){
         Collections.sort(lst, new ComparatoreDocumentiBean());
-        System.out.println("getDocumentList: " + lst.size());
         return lst;
     }
 

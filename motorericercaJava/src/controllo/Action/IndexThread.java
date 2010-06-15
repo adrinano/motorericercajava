@@ -46,7 +46,7 @@ public class IndexThread implements Runnable{
         System.out.println("Run Thread start");
         inExecution = true;
         
-        eseguiIndex();
+        eseguiUpdate();
 
         try{
             Thread.sleep(10000);
@@ -57,6 +57,36 @@ public class IndexThread implements Runnable{
         inExecution = false;
         System.out.println("Run Thread finish");
         
+    }
+
+    public void eseguiUpdate(){
+        HtmlFunction html = new HtmlFunction();
+        IndexFunction index = null;
+        try {
+            index = new IndexFunction();
+        } catch (CorruptIndexException ex) {
+            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LockObtainFailedException ex) {
+            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        XMLFunction xml = new XMLFunction();
+        List<SitoBean> siteList = xml.getSiteList();
+        LinkedList<DocumentoBean> listaDocumenti = new LinkedList<DocumentoBean>();
+        Iterator<SitoBean> iterator = siteList.iterator();
+        while (iterator.hasNext()){
+            try {
+                SitoBean sb = iterator.next();
+                System.out.println("Update della materia: " + sb.getMateria());
+                index.update(getDocumentBeanList(sb, html, listaDocumenti));
+            } catch (IOException ex) {
+                Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -83,7 +113,7 @@ public class IndexThread implements Runnable{
             try {
                 SitoBean sb = iterator.next();
                 System.out.println("Materia che indicizza: " + sb.getMateria());
-                indexing(sb, index, html, listaDocumenti);
+                index.indicizza(getDocumentBeanList(sb, html, listaDocumenti));
             } catch (IOException ex) {
                 Logger.getLogger(IndexThread.class.getName()).log(Level.SEVERE, null, ex);
             } catch (URISyntaxException ex) {
@@ -101,7 +131,7 @@ public class IndexThread implements Runnable{
     }
 
     /**
-     *
+     *Ritorna i documenti da indizizzare o con i quali fare l'update
      * @param sb
      * @param index
      * @param html
@@ -109,7 +139,7 @@ public class IndexThread implements Runnable{
      * @throws IOException
      * @throws URISyntaxException
      */
-    private static void indexing(SitoBean sb, IndexFunction index, HtmlFunction html, LinkedList<DocumentoBean> listaDocumenti) throws IOException, URISyntaxException {
+    private static LinkedList<DocumentoBean> getDocumentBeanList(SitoBean sb, HtmlFunction html, LinkedList<DocumentoBean> listaDocumenti) throws IOException, URISyntaxException {
 
         List<URL> listaPDF = html.getURLList(sb.getUrl(), ".pdf");
         for (int i = 0; i < listaPDF.size(); i++) {
@@ -124,7 +154,8 @@ public class IndexThread implements Runnable{
             listaDocumenti.add(html.getPPTinfo(sb, listaPPT.get(i)));
         }
 
-        index.indicizza(listaDocumenti);
+        //index.indicizza(listaDocumenti);
+        return listaDocumenti;
 
     }
 
