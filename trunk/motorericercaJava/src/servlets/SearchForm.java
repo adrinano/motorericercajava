@@ -40,8 +40,8 @@ public class SearchForm extends HttpServlet{
         response.setContentType("text/html");
 
         PrintWriter out = response.getWriter();
-        //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+        out.println("<!DOCTYPE HTML>");
+        out.println("<html lang=\"en\">");
         out.println("<head>");
         out.println("<title>Sherlock Tux - Results</title>");
         out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" />");
