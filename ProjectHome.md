@@ -1,0 +1,1 @@
+Piccolo motore di ricerca in java per il primo progetto del corso di Gestione dell'Informazione su web
